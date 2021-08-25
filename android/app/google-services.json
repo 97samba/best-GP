@@ -1,0 +1,68 @@
+{
+  "project_info": {
+    "project_number": "884911263833",
+    "project_id": "fir-c69a6",
+    "storage_bucket": "fir-c69a6.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:884911263833:android:593e1aa8e8bf5c61b7e148",
+        "android_client_info": {
+          "package_name": "com.firebase"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "884911263833-0pq9eaaev6tibftpukv48b0otp6p6lok.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDpBZWas0z6N7TejQthp-NVcoT8cmkRoyo"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "884911263833-0pq9eaaev6tibftpukv48b0otp6p6lok.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    },
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:884911263833:android:203584e7fbab3b7bb7e148",
+        "android_client_info": {
+          "package_name": "com.sangomar"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "884911263833-0pq9eaaev6tibftpukv48b0otp6p6lok.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDpBZWas0z6N7TejQthp-NVcoT8cmkRoyo"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "884911263833-0pq9eaaev6tibftpukv48b0otp6p6lok.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
