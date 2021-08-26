@@ -144,7 +144,7 @@ const Profile = () => {
     <NativeBaseProvider>
       <ScrollView>
         <VStack flex={1}>
-          <Box bg="white" pb={3}>
+          <Box bg="white" pb={3} rounded={(0, 0, 0, 15)}>
             <HStack m={5} height={70}>
               <VStack flex={1}>
                 <Heading>
@@ -188,7 +188,7 @@ const Profile = () => {
                 </Button>
               </HStack>
             </Center>
-            <Divider my={5} size={1} bg="dark.600" mx={2} />
+            <Divider my={5} size={1} bg="dark.600" />
             <HStack justifyContent="space-around" px={10}>
               <VStack alignItems="center">
                 <Text>1500</Text>

@@ -23,6 +23,8 @@ const AppStack = () => {
           },
           tabBarLabel: 'Acceuil',
           tabBarBadge: 3,
+          headerShown: false,
+          tabBarHideOnKeyboard: true,
         }}
       />
       <Stack.Screen
@@ -35,6 +37,7 @@ const AppStack = () => {
           },
           tabBarLabel: 'Recherche',
           headerShown: false,
+          tabBarHideOnKeyboard: true,
         }}
       />
       <Stack.Screen
