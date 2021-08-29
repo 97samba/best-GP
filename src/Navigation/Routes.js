@@ -11,6 +11,7 @@ const Routes = () => {
 
   const onAuthStateChanged = user => {
     setuser(user);
+    console.log(`user`, user);
     initializing && setinitializing(false);
   };
   useEffect(() => {

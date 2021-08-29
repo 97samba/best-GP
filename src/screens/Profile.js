@@ -23,7 +23,7 @@ import MaterialIcons from 'react-native-vector-icons/MaterialIcons';
 
 const Flights = ({item}) => {
   return (
-    <Box mt={2} bg="white" p={3} rounded={5} shadow={1}>
+    <Box mb={2} bg="white" p={3} rounded={5} shadow={1}>
       <HStack justifyContent="space-between" alignItems="center">
         <Heading size="lg" color="primary.600">
           {item.price} {item.currency}
@@ -205,7 +205,7 @@ const Profile = () => {
             </HStack>
           </Box>
           <VStack p={5}>
-            <Heading size="md" color="blueGray.600">
+            <Heading size="md" color="blueGray.600" mb={2}>
               Vols
             </Heading>
             <FlatList

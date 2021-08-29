@@ -12,16 +12,25 @@ import {
   Input,
   Image,
   View,
+  FormControl,
+  IconButton,
+  Avatar,
 } from 'native-base';
 import React, {useState} from 'react';
 import {ScrollView} from 'react-native';
-import Fontisto from 'react-native-vector-icons/Fontisto';
-import Ionicon from 'react-native-vector-icons/Ionicons';
 import MaterialIcons from 'react-native-vector-icons/MaterialIcons';
 
 const Flights = ({item}) => {
   return (
-    <Box ml={2} mb={2} bg="white" p={2} rounded={5} shadow={(1, 1, 1, 1)}>
+    <Box
+      ml={2}
+      mb={2}
+      bg="white"
+      border={0.5}
+      borderColor="coolGray.300"
+      p={2}
+      rounded={5}
+      shadow={(1, 1, 1, 1)}>
       <HStack justifyContent="space-between" alignItems="center" space={3}>
         <Heading size="lg" color="primary.600">
           {item.price} {item.currency}
@@ -53,43 +62,57 @@ const Flights = ({item}) => {
 const Header = () => {
   return (
     <VStack flex={2} bg="primary.100" p={5}>
-      {/* <Image
-        source={require('../assets/airplane-background.jpg')}
-        alt="gp-background"
-        position="absolute"
-        resizeMode="cover"
-        style={{width: '100%', height: '100%'}}
-      /> */}
-      <HStack space={2} pb={7}>
-        <Fontisto name="suitcase" size={30} color="gray" />
-        <Heading size="lg" color="blueGray.600">
-          Best GP
-        </Heading>
-      </HStack>
       <VStack>
-        <Text fontSize="3xl">Ou voulez-vous</Text>
-        <Text fontSize="3xl">
-          envoyer un{' '}
-          <Text bold fontSize="3xl">
-            colis ?
-          </Text>{' '}
-        </Text>
+        <HStack justifyContent="space-between">
+          <VStack>
+            <Text fontSize="2xl">Où voulez-vous</Text>
+            <Text fontSize="2xl">
+              envoyer un{' '}
+              <Text bold fontSize="3xl">
+                colis ?
+              </Text>{' '}
+            </Text>
+          </VStack>
+          <Avatar bg="trueGray.300">SN</Avatar>
+        </HStack>
         <HStack>
-          <Box style={{position: 'absolute', top: 1}} width="100%" shadow={5}>
-            <Input
-              placeholder="Destination"
-              variant="unstyled"
-              isFullWidth
-              InputLeftElement={
-                <Ionicon
-                  style={{marginLeft: 10}}
-                  name="location"
-                  size={25}
-                  color="gray"
-                />
-              }
-              bg="white"
-            />
+          <Box width="100%" mt={2} bg="white" px={3} py={5} rounded={10}>
+            <FormControl>
+              <Input
+                placeholder="Départ"
+                variant="unstyled"
+                isFullWidth
+                bg="trueGray.100"
+                fontSize={16}
+                InputLeftElement={
+                  <MaterialIcons
+                    name="flight-takeoff"
+                    color="gray"
+                    size={25}
+                    style={{marginHorizontal: 10}}
+                  />
+                }
+              />
+            </FormControl>
+
+            <FormControl>
+              <Input
+                mt={2}
+                fontSize={16}
+                placeholder="Destination"
+                variant="unstyled"
+                isFullWidth
+                bg="trueGray.100"
+                InputLeftElement={
+                  <MaterialIcons
+                    name="flight-land"
+                    color="gray"
+                    size={25}
+                    style={{marginHorizontal: 10}}
+                  />
+                }
+              />
+            </FormControl>
           </Box>
         </HStack>
       </VStack>
@@ -99,7 +122,7 @@ const Header = () => {
 
 const Publications = ({recent}) => {
   return (
-    <VStack mt={10} flex={2}>
+    <VStack mt={2} flex={2}>
       <HStack justifyContent="space-between" alignItems="center" px={5}>
         <Heading size="md">Publications récentes</Heading>
         <Button variant="ghost" size="md">
@@ -259,7 +282,7 @@ const Home = () => {
     <NativeBaseProvider>
       {/* <Heading>Home</Heading> */}
       <ScrollView flex={1}>
-        <VStack flex={1} bg="coolGray.100">
+        <VStack flex={1} bg="white">
           <Header />
           <Publications recent={recent} />
           <Destinations popularDestinations={popularDestinations} />
