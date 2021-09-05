@@ -12,6 +12,7 @@ import {
   Input,
   NativeBaseProvider,
   Text,
+  View,
   VStack,
 } from 'native-base';
 import React, {useState} from 'react';
@@ -20,39 +21,70 @@ import MaterialIcon from 'react-native-vector-icons/MaterialIcons';
 
 const Flights = ({item}) => {
   return (
-    <Box mt={2} bg="white" p={3} rounded={5} shadow={(1, 0, 0, 1)}>
-      <HStack justifyContent="space-between" alignItems="center">
-        <Heading size="lg" color="primary.600">
-          {item.price} {item.currency}
-        </Heading>
-        <VStack alignItems="center">
-          <Avatar bg="primary.600">I.F</Avatar>
-          <Text style={{fontSize: 12, fontWeight: '400'}}>
-            {item.firstName[0]}. {item.lastName}
-          </Text>
-        </VStack>
+    <Box mt={2} bg="white" rounded={5} shadow={(1, 0, 0, 1)}>
+      <HStack
+        justifyContent="space-between"
+        alignItems="center"
+        position="absolute"
+        top="40%"
+        width="100%">
+        <View
+          left={-10}
+          width={5}
+          height={5}
+          border={1}
+          borderColor="gray.200"
+          rounded={50}
+          overflow="hidden"
+          bg="trueGray.100"></View>
+        {/* <Divider width="80%" borderStyle="dotted" /> */}
+        <View
+          right={-10}
+          width={5}
+          height={5}
+          border={1}
+          borderColor="gray.200"
+          // position="absolute"
+          // top="50%"
+          rounded={50}
+          // right={-35}
+          bg="trueGray.100"></View>
       </HStack>
-      <HStack alignItems="center" pt={2} space={1}>
-        <MaterialIcon name="flight-takeoff" color="gray" size={20} />
-        <Text> {item.from}</Text>
-        <Divider width={10} mx={2} size={2} />
-        <Text mr={1}>{item.to}</Text>
-        <MaterialIcon name="flight-land" color="gray" size={20} />
-      </HStack>
-      <HStack justifyContent="space-between" pt={5}>
-        <VStack>
-          <Text bold>Départ </Text>
-          <Text>{item.departure}</Text>
-        </VStack>
-        <VStack>
-          <Text bold>Dernier dépot</Text>
-          <Text>{item.distribution}</Text>
-        </VStack>
-        <VStack>
-          <Text bold>Vol</Text>
-          <Text>{item.flightMode}</Text>
-        </VStack>
-      </HStack>
+
+      <Box p={3}>
+        <HStack justifyContent="space-between" alignItems="center">
+          <Heading size="lg" color="primary.600">
+            {item.price} {item.currency}
+          </Heading>
+          <VStack alignItems="center">
+            <Avatar bg="primary.600">I.F</Avatar>
+            <Text style={{fontSize: 12, fontWeight: '400'}}>
+              {item.firstName[0]}. {item.lastName}
+            </Text>
+          </VStack>
+        </HStack>
+        <HStack alignItems="center" pt={2} space={1}>
+          <MaterialIcon name="flight-takeoff" color="gray" size={20} />
+          <Text> {item.from}</Text>
+          <Divider width={10} mx={2} size={2} />
+          <Text mr={1}>{item.to}</Text>
+          <MaterialIcon name="flight-land" color="gray" size={20} />
+        </HStack>
+        <HStack justifyContent="space-between" pt={5}>
+          <VStack>
+            <Text bold>Départ </Text>
+            <Text>{item.departure}</Text>
+          </VStack>
+          <VStack>
+            <Text bold>Dernier dépot</Text>
+            <Text>{item.distribution}</Text>
+          </VStack>
+          <VStack>
+            <Text bold>Vol</Text>
+            <Text>{item.flightMode}</Text>
+          </VStack>
+        </HStack>
+      </Box>
     </Box>
   );
 };
@@ -172,9 +204,12 @@ const Search = () => {
             /> */}
           </HStack>
           <Box>
-            <Heading pt={5} size="md">
-              Résultats
-            </Heading>
+            <HStack>
+              <Heading pt={5} size="md">
+                Résultats :{' '}
+                <Text fontSize={16}>{searchResults.length} vols</Text>
+              </Heading>
+            </HStack>
             <VStack>
               <FlatList
                 nestedScrollEnabled={true}

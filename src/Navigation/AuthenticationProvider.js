@@ -34,10 +34,12 @@ const AuthenticationProvider = ({children}) => {
       return error.code;
     }
   };
+
   const logOut = () => {
     console.log(`logOut`);
     auth().signOut();
   };
+
   return (
     <AuthenticationContext.Provider
       value={{

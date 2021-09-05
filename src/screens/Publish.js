@@ -1,305 +1,26 @@
-import {
-  Box,
-  HStack,
-  NativeBaseProvider,
-  VStack,
-  Text,
-  Heading,
-  Input,
-  Button,
-  Select,
-  ScrollView,
-  Center,
-} from 'native-base';
-import React, {useState} from 'react';
+import {Box, NativeBaseProvider, VStack, Button, ScrollView} from 'native-base';
+import React, {useState, createContext, useContext} from 'react';
 import MaterialIcon from 'react-native-vector-icons/MaterialIcons';
-import FontAwesome5 from 'react-native-vector-icons/FontAwesome5';
-import DateTimePicker from '@react-native-community/datetimepicker';
-import {TouchableOpacity} from 'react-native';
-import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
-import IonIcon from 'react-native-vector-icons/Ionicons';
 
-const Vol = () => {
-  return (
-    <VStack space={2}>
-      <Heading fontSize={20} pb={2} color="blueGray.600">
-        Vol
-      </Heading>
-      <Input
-        rounded={4}
-        variant="unstyled"
-        bg="white"
-        placeholder="Départ"
-        InputLeftElement={
-          <MaterialIcon
-            name="flight-takeoff"
-            size={20}
-            color="gray"
-            style={{marginLeft: 10}}
-          />
-        }
-      />
-      <Input
-        rounded={4}
-        variant="unstyled"
-        bg="white"
-        placeholder="Destination"
-        InputLeftElement={
-          <MaterialIcon
-            name="flight-land"
-            size={20}
-            color="gray"
-            style={{marginLeft: 10}}
-          />
-        }
-      />
-    </VStack>
-  );
-};
+import Vols from '../Components/PublishComponents/Vols';
+import Valises from '../Components/PublishComponents/Valises';
+import Prices from '../Components/PublishComponents/Prices';
+import DepotRetrait from '../Components/PublishComponents/DepotRetrait';
+import Contacts from '../Components/PublishComponents/Contacts';
+import Personnalisation from '../Components/PublishComponents/Personnalisation';
+import Dates from '../Components/PublishComponents/Dates';
 
-const Valises = () => {
-  return (
-    <VStack space={2}>
-      <Heading fontSize={20} my={2} color="blueGray.600">
-        Valises
-      </Heading>
-
-      <HStack space={3} bg="white" py={1} rounded={5} alignItems="center">
-        <FontAwesome5
-          name="suitcase"
-          size={20}
-          color="gray"
-          style={{marginLeft: 10}}
-        />
-        <Text flexGrow={1}>Soute</Text>
-        <Box>
-          <Select
-            minWidth={150}
-            height={45}
-            placeholder="Poids"
-            borderColor="white">
-            <Select.Item label={'23 kg'} value={23} />
-            <Select.Item label={'32 kg'} value={32} />
-            <Select.Item label={'Supprimer'} value={0} />
-          </Select>
-        </Box>
-      </HStack>
-
-      <HStack space={3} bg="white" py={1} rounded={5} alignItems="center">
-        <FontAwesome5
-          name="suitcase-rolling"
-          size={20}
-          color="gray"
-          style={{marginLeft: 10}}
-        />
-        <Text flexGrow={1}>Cabine</Text>
-        <Box>
-          <Select minWidth={150} placeholder="Poids" borderColor="white">
-            <Select.Item label={'10 kg'} value={10} />
-            <Select.Item label={'12 kg'} value={12} />
-            <Select.Item label={'14 kg'} value={14} />
-            <Select.Item label={'Supprimer'} value={0} />
-          </Select>
-        </Box>
-      </HStack>
-
-      <Button
-        bg="blueGray.400"
-        _text={{
-          color: 'white',
-        }}
-        my={2}
-        size="sm">
-        Ajouter une valise
-      </Button>
-    </VStack>
-  );
-};
-
-const Dates = () => {
-  const [dateDeparture, setdateDeparture] = useState(new Date());
-  const [showDeparture, setshowDeparture] = useState(false);
-  const [dateArrival, setdateArrival] = useState(new Date());
-  const [showArrival, setshowArrival] = useState(false);
-
-  return (
-    <VStack space={2}>
-      <Heading fontSize={20} my={2} color="blueGray.600">
-        Dates
-      </Heading>
-      {showDeparture && (
-        <Center>
-          <DateTimePicker value={dateDeparture} mode="datetime" />
-        </Center>
-      )}
-      <HStack space={3} bg="white" py={4} rounded={5}>
-        <FontAwesome5
-          name="calendar-alt"
-          size={20}
-          color="gray"
-          style={{marginLeft: 10}}
-        />
-        <Box width="80%">
-          <TouchableOpacity onPress={() => setshowArrival(true)}>
-            <Text color="gray.400">Date de départ</Text>
-            {/* <Text>{dateDeparture.toLocaleDateString()}</Text> */}
-          </TouchableOpacity>
-        </Box>
-      </HStack>
-      {showArrival && (
-        <Center>
-          <DateTimePicker value={dateArrival} mode="datetime" />
-        </Center>
-      )}
-      <HStack space={3} bg="white" py={4} rounded={5}>
-        <FontAwesome5
-          name="calendar-times"
-          size={20}
-          color="gray"
-          style={{marginLeft: 10}}
-        />
-        <Box width="80%">
-          <TouchableOpacity onPress={() => setshowDeparture(true)}>
-            <Text color="gray.400">Dernier dépot</Text>
-            {/* <Text>{dateArrival.toLocaleDateString()}</Text> */}
-          </TouchableOpacity>
-        </Box>
-      </HStack>
-      <HStack space={3} bg="white" py={4} rounded={5}>
-        <FontAwesome5
-          name="calendar-check"
-          size={20}
-          color="gray"
-          style={{marginLeft: 10}}
-        />
-        <Box width="80%">
-          <TouchableOpacity onPress={() => setshowDeparture(true)}>
-            <Text color="gray.400">Date de distribution</Text>
-            {/* <Text>{dateArrival.toLocaleDateString()}</Text> */}
-          </TouchableOpacity>
-        </Box>
-      </HStack>
-    </VStack>
-  );
-};
-
-const Contacts = () => {
-  return (
-    <VStack space={2}>
-      <Heading fontSize={20} my={2} color="blueGray.600">
-        Contacts
-      </Heading>
-      <Input
-        rounded={4}
-        variant="unstyled"
-        bg="white"
-        placeholder="Prénom NOM"
-        InputLeftElement={
-          <MaterialIcon
-            name="person"
-            size={20}
-            color="gray"
-            style={{marginLeft: 10}}
-          />
-        }
-      />
-      <Input
-        rounded={4}
-        variant="unstyled"
-        bg="white"
-        placeholder="Mon numéro"
-        InputLeftElement={
-          <MaterialIcon
-            name="call"
-            size={20}
-            color="gray"
-            style={{marginLeft: 10}}
-          />
-        }
-        InputRightElement={
-          <Select
-            minWidth={160}
-            placeholder="Visibilité"
-            selectedValue="public"
-            borderColor="white">
-            <Select.Item label={'Privé'} value="private" />
-            <Select.Item label={'Public'} value="public" />
-            <Select.Item label={'Me demander'} value="ask" />
-            <Select.Item
-              _text={{color: 'red.500'}}
-              label={'Supprimer'}
-              value={0}
-            />
-          </Select>
-        }
-      />
-      <Button
-        bg="blueGray.400"
-        _text={{
-          color: 'white',
-        }}
-        my={2}
-        size="sm">
-        Ajouter un contact
-      </Button>
-    </VStack>
-  );
-};
-
-const DepotRetrait = () => {
-  return (
-    <VStack space={2}>
-      <Heading fontSize={20} my={2} color="blueGray.600">
-        Dépot - Retrait
-      </Heading>
-      <Input
-        rounded={4}
-        variant="unstyled"
-        bg="white"
-        placeholder="Adresse dépot"
-        InputLeftElement={
-          <MaterialCommunityIcons
-            name="package-variant-closed"
-            size={20}
-            color="gray"
-            style={{marginLeft: 10}}
-          />
-        }
-      />
-      <Input
-        rounded={4}
-        variant="unstyled"
-        bg="white"
-        placeholder="Adresse retrait"
-        InputLeftElement={
-          <MaterialCommunityIcons
-            name="package-variant"
-            size={20}
-            color="gray"
-            style={{marginLeft: 10}}
-          />
-        }
-      />
-      <Button
-        bg="blueGray.400"
-        _text={{
-          color: 'white',
-        }}
-        my={2}
-        size="sm">
-        Ajouter une adresse
-      </Button>
-    </VStack>
-  );
-};
+export const PublishContext = createContext();
 
 const MoreButton = () => {
+  const {handleSave} = useContext(PublishContext);
   return (
     <VStack>
       <Button
         // variant="unstyled"
         bg="teal.400"
         rounded={0}
+        onPress={handleSave}
         startIcon={
           <MaterialIcon
             name="add"
@@ -313,97 +34,83 @@ const MoreButton = () => {
     </VStack>
   );
 };
-const Prices = () => {
-  return (
-    <VStack space={2}>
-      <HStack alignItems="center" justifyContent="space-between">
-        <Heading fontSize={20} my={2} color="blueGray.600">
-          Tarifications
-        </Heading>
-        <TouchableOpacity>
-          <HStack alignItems="center" space={2}>
-            <Heading fontSize={14} color="blueGray.600">
-              {' '}
-              ( + 1 € sur le prix final)
-            </Heading>
-            <MaterialIcon name="info" size={14} color="gray" />
-          </HStack>
-        </TouchableOpacity>
-      </HStack>
-      <Input
-        rounded={4}
-        variant="unstyled"
-        bg="white"
-        placeholder="Prix par kilo"
-        InputLeftElement={
-          <IonIcon
-            name="pricetag"
-            size={20}
-            color="gray"
-            style={{marginLeft: 10}}
-          />
-        }
-      />
-      <Input
-        rounded={4}
-        variant="unstyled"
-        bg="white"
-        placeholder="Prix par valise"
-        InputLeftElement={
-          <IonIcon
-            name="pricetags-outline"
-            size={20}
-            color="gray"
-            style={{marginLeft: 10}}
-          />
-        }
-      />
-      <Button
-        bg="blueGray.400"
-        _text={{
-          color: 'white',
-        }}
-        my={2}
-        size="sm">
-        Ajouter une tarification
-      </Button>
-    </VStack>
-  );
-};
-const Personnalisation = () => {
-  return (
-    <VStack space={2}>
-      <Heading fontSize={20} my={2} color="blueGray.600">
-        Personalisations
-      </Heading>
-
-      <Button
-        bg="blueGray.400"
-        _text={{
-          color: 'white',
-        }}
-        my={2}
-        size="sm">
-        Plus de Personnalisations
-      </Button>
-    </VStack>
-  );
-};
 
 const Publish = () => {
+  //vols
+  const [departure, setdeparture] = useState('dakar');
+  const [destination, setdestination] = useState('Paris');
+
+  //dates
+  const [departureDate, setdepartureDate] = useState(new Date());
+  const [lastDepot, setLastDepot] = useState(new Date());
+  const [distributionDate, setdistributionDate] = useState(new Date());
+
+  //Adresses
+  const [depotAdresse, setdepotAdresse] = useState('');
+  const [retraitAdresse, setretraitAdresse] = useState('');
+
+  //contact
+  const [userName, setuserName] = useState('');
+  const [userFirstName, setuserFirstName] = useState('');
+  const [userPhoneNumber, setuserPhoneNumber] = useState('');
+  const [userPoneNumberPrivacy, setuserPoneNumberPrivacy] = useState('public');
+
+  //tarifications
+  const [pricePerKg, setpricePerKg] = useState(10);
+  const [pricePerSuitcase, setpricePerSuitcase] = useState(200);
+
+  const handleSave = () => {
+    console.log(`username`, username);
+    console.log(departure);
+    console.log(destination);
+    console.log(pricePerKg);
+    console.log(pricePerSuitcase);
+  };
+
   return (
     <NativeBaseProvider>
       <ScrollView>
-        <Box flex={1} p={5} color="gray">
-          <Vol />
-          <Dates />
-          <Valises />
-          <DepotRetrait />
-          <Contacts />
-          <Prices />
-          <Personnalisation />
-        </Box>
-        <MoreButton />
+        <PublishContext.Provider
+          value={{
+            departure,
+            setdeparture,
+            destination,
+            setdestination,
+            departureDate,
+            setdepartureDate,
+            lastDepot,
+            setLastDepot,
+            distributionDate,
+            setdistributionDate,
+            depotAdresse,
+            setdepotAdresse,
+            retraitAdresse,
+            setretraitAdresse,
+            userName,
+            setuserName,
+            userFirstName,
+            setuserFirstName,
+            userPhoneNumber,
+            setuserPhoneNumber,
+            userPoneNumberPrivacy,
+            setuserPoneNumberPrivacy,
+            pricePerKg,
+            setpricePerKg,
+            pricePerSuitcase,
+            setpricePerSuitcase,
+            handleSave,
+          }}>
+          <Box flex={1} p={5} color="gray">
+            <Vols />
+            <Dates />
+            <Valises />
+            <DepotRetrait />
+            <Contacts />
+            <Prices />
+            <Personnalisation />
+          </Box>
+          <MoreButton />
+        </PublishContext.Provider>
       </ScrollView>
     </NativeBaseProvider>
   );
