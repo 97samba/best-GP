@@ -1,23 +1,7 @@
-import {
-  Box,
-  HStack,
-  NativeBaseProvider,
-  VStack,
-  Text,
-  Heading,
-  Input,
-  Button,
-  Select,
-  ScrollView,
-  Center,
-} from 'native-base';
-import React, {useState, createContext, useContext} from 'react';
+import {VStack, Heading, Input, Button, Select} from 'native-base';
+import React, {useContext} from 'react';
 import MaterialIcon from 'react-native-vector-icons/MaterialIcons';
-import FontAwesome5 from 'react-native-vector-icons/FontAwesome5';
-import DateTimePicker from '@react-native-community/datetimepicker';
-import {TouchableOpacity} from 'react-native';
-import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
-import IonIcon from 'react-native-vector-icons/Ionicons';
+
 import {PublishContext} from '../../screens/Publish';
 
 const Contacts = () => {
@@ -38,7 +22,7 @@ const Contacts = () => {
         Contacts
       </Heading>
       <Input
-        vaue={userFirstName}
+        value={userFirstName}
         onChangeText={text => setuserFirstName(text)}
         rounded={4}
         variant="unstyled"

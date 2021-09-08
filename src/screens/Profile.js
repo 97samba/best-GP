@@ -129,7 +129,7 @@ const Comments = ({item}) => {
     </Box>
   );
 };
-const Profile = () => {
+const Profile = ({navigation}) => {
   const {logOut} = useContext(AuthenticationContext);
   const [route, setroute] = useState({
     firstName: 'Samba',
@@ -185,77 +185,81 @@ const Profile = () => {
       },
     ],
   });
+
+  const Header = () => {
+    return (
+      <Box bg="white" pb={3} rounded={(0, 0, 0, 15)}>
+        <HStack m={5} height={70}>
+          <VStack flex={1}>
+            <Heading>
+              {route.firstName} {route.lastName}
+            </Heading>
+            <HStack>
+              <Ionicon name="location" size={20} color="gray" />
+              <Text size="sm" color="gray.500">
+                {route.location}
+              </Text>
+            </HStack>
+          </VStack>
+          <VStack alignItems="center">
+            <Avatar bg="gray.300" size={12}>
+              SN
+            </Avatar>
+          </VStack>
+        </HStack>
+        <Center>
+          <HStack space={5}>
+            <Button
+              variant="solid"
+              size="lg"
+              px={10}
+              bg="blueGray.400"
+              _text={{color: 'white'}}
+              startIcon={<Ionicon name="person-add" size={20} color="white" />}>
+              Suivre
+            </Button>
+            <Button
+              _text={{color: 'white'}}
+              bg="amber.600"
+              startIcon={<AntDesign name="message1" size={20} color="white" />}
+              size="lg"
+              px={10}>
+              Message
+            </Button>
+          </HStack>
+        </Center>
+        <Divider my={5} size={1} bg="dark.600" />
+        <HStack justifyContent="space-around" px={10}>
+          <VStack alignItems="center">
+            <Text>1500</Text>
+            <Text color="gray.400">Abonnés</Text>
+          </VStack>
+          <VStack alignItems="center">
+            <Text>9 / 10</Text>
+            <Text color="gray.400">Note</Text>
+          </VStack>
+          <VStack alignItems="center">
+            <Text>19</Text>
+            <Text color="gray.400">Vols</Text>
+          </VStack>
+        </HStack>
+      </Box>
+    );
+  };
   return (
     <NativeBaseProvider>
       <ScrollView>
         <VStack flex={1}>
-          <Box bg="white" pb={3} rounded={(0, 0, 0, 15)}>
-            <HStack m={5} height={70}>
-              <VStack flex={1}>
-                <Heading>
-                  {route.firstName} {route.lastName}
-                </Heading>
-                <HStack>
-                  <Ionicon name="location" size={20} color="gray" />
-                  <Text size="sm" color="gray.500">
-                    {route.location}
-                  </Text>
-                </HStack>
-              </VStack>
-              <VStack alignItems="center">
-                <Avatar bg="gray.300" size={12}>
-                  SN
-                </Avatar>
-              </VStack>
-            </HStack>
-            <Center>
-              <HStack space={5}>
-                <Button
-                  variant="solid"
-                  size="lg"
-                  px={10}
-                  bg="blueGray.400"
-                  _text={{color: 'white'}}
-                  startIcon={
-                    <Ionicon name="person-add" size={20} color="white" />
-                  }>
-                  Suivre
-                </Button>
-                <Button
-                  _text={{color: 'white'}}
-                  bg="amber.600"
-                  startIcon={
-                    <AntDesign name="message1" size={20} color="white" />
-                  }
-                  size="lg"
-                  px={10}>
-                  Message
-                </Button>
-              </HStack>
-            </Center>
-            <Divider my={5} size={1} bg="dark.600" />
-            <HStack justifyContent="space-around" px={10}>
-              <VStack alignItems="center">
-                <Text>1500</Text>
-                <Text color="gray.400">Abonnés</Text>
-              </VStack>
-              <VStack alignItems="center">
-                <Text>9 / 10</Text>
-                <Text color="gray.400">Note</Text>
-              </VStack>
-              <VStack alignItems="center">
-                <Text>19</Text>
-                <Text color="gray.400">Vols</Text>
-              </VStack>
-            </HStack>
-          </Box>
+          <Header />
           <VStack p={5}>
             <Heading size="md" color="blueGray.600" mb={2}>
               Vols
             </Heading>
             <FlatList
               data={route.flights}
-              renderItem={({item}) => <Flights item={item} />}
+              renderItem={({item}) => (
+                <Flights item={item} navigation={navigation} />
+              )}
             />
           </VStack>
           <VStack p={5}>

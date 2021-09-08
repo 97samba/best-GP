@@ -1,5 +1,6 @@
 import React, {createContext, useState} from 'react';
 import auth from '@react-native-firebase/auth';
+import firestore from '@react-native-firebase/firestore';
 export const AuthenticationContext = createContext();
 
 const AuthenticationProvider = ({children}) => {
@@ -7,19 +8,38 @@ const AuthenticationProvider = ({children}) => {
 
   const login = async (email, password) => {
     try {
-      await auth().signInWithEmailAndPassword(email, password);
+      await auth()
+        .signInWithEmailAndPassword(email, password)
+        .then(res => {
+          console.log('user ', res.user);
+        });
     } catch (e) {
       console.log(Object.getOwnPropertyNames(e));
       return e.code;
     }
+  };
+  const createUserDocument = async uid => {
+    const infos = {
+      firstName: 'anon',
+      lastName: 'anonyme',
+      favoriteFlights: [],
+      publishedFlights: [],
+      purchased: [],
+    };
+    await firestore()
+      .collection('users')
+      .doc(uid)
+      .set(infos)
+      .then(console.log('Les informations ont été crées'));
   };
 
   const register = async (email, password) => {
     try {
       await auth()
         .createUserWithEmailAndPassword(email, password)
-        .then(() => {
-          console.log('User account created & signed in!');
+        .then(res => {
+          console.log('User account created & signed in!', res.user);
+          createUserDocument(res.user.uid);
         });
     } catch (error) {
       if (error.code === 'auth/email-already-in-use') {

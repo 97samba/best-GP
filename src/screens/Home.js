@@ -7,20 +7,19 @@ import {
   NativeBaseProvider,
   Text,
   VStack,
-  Center,
   Divider,
   Input,
   Image,
   View,
   FormControl,
-  IconButton,
   Avatar,
 } from 'native-base';
 import React, {useState} from 'react';
 import {ScrollView} from 'react-native';
 import MaterialIcons from 'react-native-vector-icons/MaterialIcons';
+import Flights from '../Components/Flights/Flight';
 
-const Flights = ({item}) => {
+const Flightss = ({item}) => {
   return (
     <Box
       ml={2}
@@ -61,7 +60,7 @@ const Flights = ({item}) => {
 
 const Header = () => {
   return (
-    <VStack flex={2} bg="primary.100" p={5}>
+    <VStack flex={2} bg="trueGray.100" p={5}>
       <VStack>
         <HStack justifyContent="space-between">
           <VStack>
@@ -76,13 +75,13 @@ const Header = () => {
           <Avatar bg="trueGray.300">SN</Avatar>
         </HStack>
         <HStack>
-          <Box width="100%" mt={2} bg="white" px={3} py={5} rounded={10}>
+          <Box width="100%" mt={2} bg="white" px={2} py={1} rounded={10}>
             <FormControl>
               <Input
                 placeholder="Départ"
                 variant="unstyled"
                 isFullWidth
-                bg="trueGray.100"
+                bg="white"
                 fontSize={16}
                 InputLeftElement={
                   <MaterialIcons
@@ -94,6 +93,7 @@ const Header = () => {
                 }
               />
             </FormControl>
+            <Divider size={0.7} />
 
             <FormControl>
               <Input
@@ -102,7 +102,7 @@ const Header = () => {
                 placeholder="Destination"
                 variant="unstyled"
                 isFullWidth
-                bg="trueGray.100"
+                bg="white"
                 InputLeftElement={
                   <MaterialIcons
                     name="flight-land"
@@ -120,12 +120,12 @@ const Header = () => {
   );
 };
 
-const Publications = ({recent}) => {
+const Publications = ({recent, navigation}) => {
   return (
     <VStack mt={2} flex={2}>
       <HStack justifyContent="space-between" alignItems="center" px={5}>
         <Heading size="md">Publications récentes</Heading>
-        <Button variant="ghost" size="md">
+        <Button variant="ghost" size="md" _text={{color: 'blueGray.500'}}>
           voir
         </Button>
       </HStack>
@@ -133,7 +133,11 @@ const Publications = ({recent}) => {
         <FlatList
           horizontal
           data={recent}
-          renderItem={({item}) => <Flights item={item} />}
+          renderItem={({item}) => (
+            <Box m={2}>
+              <Flights item={item} navigation={navigation} />
+            </Box>
+          )}
           showsHorizontalScrollIndicator={false}
         />
       </HStack>
@@ -141,13 +145,13 @@ const Publications = ({recent}) => {
   );
 };
 
-const Destinations = ({popularDestinations}) => {
+const Destinations = ({popularDestinations, navigation}) => {
   return (
     <Box flex={2}>
       <VStack>
         <HStack px={5} justifyContent="space-between" alignItems="center">
           <Heading size="md">Destinations Populaires</Heading>
-          <Button variant="ghost" size="md" color="blueGray.400">
+          <Button variant="ghost" size="md" _text={{color: 'blueGray.500'}}>
             voir
           </Button>
         </HStack>
@@ -194,7 +198,7 @@ const Destinations = ({popularDestinations}) => {
     </Box>
   );
 };
-const Home = () => {
+const Home = ({navigation}) => {
   const [popularDestinations, setpopularDestinations] = useState([
     {
       name: 'Paris',
@@ -236,57 +240,56 @@ const Home = () => {
   ]);
   const [recent, setrecent] = useState([
     {
-      from: 'Paris',
-      to: 'Dakar',
-      firstName: 'Ibrahima',
-      lastName: 'Faye',
-      price: 10,
-      currency: '€ ',
-      departure: '10/10/2021',
-      distribution: '10/10/2021',
-      flightMode: 'Direct',
-      picture: 'primary.200',
-      flights: 5,
-      key: 1,
+      departure: 'New York',
+      departureDate: new Date(),
+      depotAdresse: 'Sacré coeur, Dakar',
+      destination: 'Banjul',
+      distributionDate: new Date(),
+      lastDepot: new Date(),
+      pricePerKg: '12',
+      pricePerSuitcase: '200',
+      publisher: {
+        firsName: 'Samba',
+        id: 'ki8Aok1CrWheoEhlhPCH8JS1d742',
+        lastName: 'Ndiaye',
+        phone: '0612345687',
+      },
+      retraitAdresse: 'Barbes Rochechoir, Paris 18',
+      valise: [
+        {key: 1, poids: 23, type: 'soute', unite: 'kg'},
+        {key: 2, poids: 12, type: 'cabine', unite: 'kg'},
+      ],
     },
     {
-      from: 'London',
-      to: 'Dakar',
-      firstName: 'Ibrahima',
-      lastName: 'Faye',
-      price: 8,
-      currency: '£',
-      departure: '10/10/2021',
-      distribution: '10/10/2021',
-      flightMode: 'Direct',
-      picture: 'primary.200',
-      flights: 15,
-      key: 2,
-    },
-    {
-      from: 'New York',
-      to: 'Dakar',
-      firstName: 'Ibrahima',
-      lastName: 'Faye',
-      price: 12,
-      currency: '$',
-      departure: '10/10/2021',
-      distribution: '10/10/2021',
-      flightMode: 'Direct',
-      picture: 'primary.200',
-      flights: 15,
-      key: 3,
+      departure: 'New York',
+      departureDate: new Date(),
+      depotAdresse: 'Sacré coeur, Dakar',
+      destination: 'Banjul',
+      distributionDate: new Date(),
+      lastDepot: new Date(),
+      pricePerKg: '12',
+      pricePerSuitcase: '200',
+      publisher: {
+        firsName: 'Assane',
+        id: 'ki8Aok1CrWheoEhlhPCH8JS1d742',
+        lastName: 'Ndiaye',
+        phone: '0612345687',
+      },
+      retraitAdresse: 'Barbes Rochechoir, Paris 18',
+      valise: [
+        {key: 1, poids: 23, type: 'soute', unite: 'kg'},
+        {key: 2, poids: 12, type: 'cabine', unite: 'kg'},
+      ],
     },
   ]);
   return (
     <NativeBaseProvider>
       {/* <Heading>Home</Heading> */}
       <ScrollView flex={1}>
-        <VStack flex={1} bg="white">
+        <VStack flex={1} bg="trueGray.100">
           <Header />
-          <Publications recent={recent} />
           <Destinations popularDestinations={popularDestinations} />
-          <Destinations popularDestinations={popularDestinations} />
+          <Publications recent={recent} navigation={navigation} />
         </VStack>
       </ScrollView>
     </NativeBaseProvider>

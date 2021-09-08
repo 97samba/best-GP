@@ -34,9 +34,12 @@ const Dates = () => {
   const [showArrival, setshowArrival] = useState(false);
   const [showLastDepot, setshowLastDepot] = useState(false);
 
-  useEffect(() => {
-    console.log(`Date`, departureDate);
-  }, []);
+  const HandleDateChanged = (date, setDate, optionDate, show) => {
+    date ? setDate(date) : setDate(optionDate);
+    console.log(`date : `, date);
+    show(false);
+  };
+
   return (
     <VStack space={2}>
       <Heading fontSize={20} my={2} color="blueGray.600">
@@ -46,10 +49,14 @@ const Dates = () => {
         <Center>
           <DateTimePicker
             value={departureDate}
+            testID="departurePicker"
             onChange={(e, date) => {
-              setdepartureDate(date || departureDate);
-              console.log(`date`, date.toLocaleDateString());
-              setshowDeparture(false);
+              HandleDateChanged(
+                date,
+                setdepartureDate,
+                departureDate,
+                setshowDeparture,
+              );
             }}
             mode="datetime"
           />
@@ -76,10 +83,9 @@ const Dates = () => {
         <Center>
           <DateTimePicker
             value={lastDepot}
-            onChange={(e, date) => {
-              setLastDepot(date);
-              setshowLastDepot(false);
-            }}
+            onChange={(e, date) =>
+              HandleDateChanged(date, setLastDepot, lastDepot, setshowLastDepot)
+            }
             mode="datetime"
           />
         </Center>
@@ -102,10 +108,14 @@ const Dates = () => {
         <Center>
           <DateTimePicker
             value={distributionDate}
-            onChange={(e, date) => {
-              setdistributionDate(date);
-              setshowArrival(false);
-            }}
+            onChange={(e, date) =>
+              HandleDateChanged(
+                date,
+                setdistributionDate,
+                distributionDate,
+                setshowArrival,
+              )
+            }
             mode="datetime"
           />
         </Center>

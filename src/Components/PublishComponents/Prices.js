@@ -1,5 +1,5 @@
 import {HStack, VStack, Heading, Input, Button} from 'native-base';
-import React, {useContext} from 'react';
+import React, {useContext, useEffect} from 'react';
 import MaterialIcon from 'react-native-vector-icons/MaterialIcons';
 
 import {TouchableOpacity} from 'react-native';
