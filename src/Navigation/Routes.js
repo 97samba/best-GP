@@ -11,6 +11,9 @@ const Routes = () => {
 
   const onAuthStateChanged = user => {
     setuser(user);
+    user && user.displayName === null
+      ? user.updateProfile({displayName: 'Utilisateur'})
+      : null;
     initializing && setinitializing(false);
   };
   useEffect(() => {

@@ -16,10 +16,12 @@ import {AuthenticationContext} from '../Navigation/AuthenticationProvider';
 
 const Register = ({navigation}) => {
   const {register} = useContext(AuthenticationContext);
-  const [email, setemail] = useState('test');
-  const [password1, setpassword1] = useState('test');
-  const [password2, setpassword2] = useState('test');
+  const [email, setemail] = useState('test@gmail.com');
+  const [password1, setpassword1] = useState('testtest');
+  const [password2, setpassword2] = useState('testtest');
   const [errorText, seterrorText] = useState();
+  const [firstName, setfirstName] = useState('samba');
+  const [lastName, setlastName] = useState('NDIAYE');
 
   const ValidateRegister = async () => {
     seterrorText('');
@@ -28,7 +30,7 @@ const Register = ({navigation}) => {
       !email && seterrorText('Email requis');
       return;
     }
-    const result = await register(email, password1);
+    const result = await register(email, password1, firstName, lastName);
     seterrorText(result);
   };
 
@@ -36,12 +38,29 @@ const Register = ({navigation}) => {
     <NativeBaseProvider>
       <Center pt={15}>
         <Heading>Register</Heading>
-        <Text pt={5} color="secondary.600">
+        <Text pt={2} color="secondary.600">
           {errorText}
         </Text>
       </Center>
       <VStack>
-        <Box p={5}>
+        <Box px={5}>
+          <HStack space={3}>
+            <Input
+              flex={1}
+              isFullWidth
+              placeholder="Prénom"
+              variant="underlined"
+              value={firstName}
+              onChangeText={value => setfirstName(value)}
+            />
+            <Input
+              flex={1}
+              placeholder="Nom"
+              variant="underlined"
+              value={lastName}
+              onChangeText={value => setlastName(value)}
+            />
+          </HStack>
           <FormControl>
             <Input
               placeholder="Email"
@@ -69,12 +88,12 @@ const Register = ({navigation}) => {
             />
           </FormControl>
         </Box>
-        <Center pt={5}>
-          <Button size="lg" width={150} onPress={ValidateRegister}>
+        <Center pt={2}>
+          <Button size="md" width={150} onPress={ValidateRegister}>
             Créer
           </Button>
         </Center>
-        <Center pt={5}>
+        <Center pt={3}>
           <HStack>
             <Text>Vous avez déja un compte,</Text>
             <Link
@@ -86,7 +105,7 @@ const Register = ({navigation}) => {
           </HStack>
         </Center>
       </VStack>
-      <VStack pt={10}>
+      <VStack pt={5}>
         <Center>
           <VStack width="80%" space={2}>
             <Button p={4} bg="gray.200">

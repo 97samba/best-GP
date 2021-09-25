@@ -142,9 +142,7 @@ const Search = ({navigation}) => {
         setresults(querySnapshot.docs);
       })
       .then(() => {
-        results.forEach(item => {
-          console.log(`item`, item);
-        });
+        setloading(false);
       });
   }, []);
   return (
@@ -153,18 +151,25 @@ const Search = ({navigation}) => {
         <Box>
           <VStack>
             <FlatList
-              ListHeaderComponent={
-                <SearchHeader searchResults={searchResults} />
-              }
+              ListHeaderComponent={<SearchHeader searchResults={results} />}
               ListFooterComponent={
                 <Center m={5}>
-                  <Text>Best GP</Text>
+                  <Text>Fast GP</Text>
                 </Center>
               }
               data={results}
-              renderItem={({item}) => (
-                <Flights item={item.data()} navigation={navigation} />
-              )}
+              renderItem={({item}) =>
+                loading ? (
+                  <Box>
+                    <Text>test</Text>
+                  </Box>
+                ) : (
+                  <Flights
+                    item={{...item.data(), id: item.id}}
+                    navigation={navigation}
+                  />
+                )
+              }
               showsVerticalScrollIndicator={false}
             />
           </VStack>

@@ -72,8 +72,10 @@ const Publish = () => {
   );
 
   //contact
-  const [userName, setuserName] = useState('NDIAYE');
-  const [userFirstName, setuserFirstName] = useState('Samba');
+  const [userName, setuserName] = useState();
+  // user.displayName.split(' ')[1] || null,
+  const [userFirstName, setuserFirstName] = useState();
+  // user.displayName.split(' ')[0] || null,
   const [userPhoneNumber, setuserPhoneNumber] = useState('0612345687');
   const [userPoneNumberPrivacy, setuserPoneNumberPrivacy] = useState('public');
 
@@ -112,11 +114,10 @@ const Publish = () => {
       pricePerKg: pricePerKg,
       pricePerSuitcase: pricePerSuitcase,
     };
-    console.log(`item`, item);
     await Firestore()
       .collection('flights')
       .add(item)
-      .then(() => console.log('finish adding item'));
+      .then(() => console.log('done'));
   };
 
   return (

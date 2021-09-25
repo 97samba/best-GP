@@ -13,16 +13,18 @@ import {
   View,
   VStack,
 } from 'native-base';
-import React, {useContext, useState} from 'react';
+import React, {useContext, useEffect, useState} from 'react';
 import Ionicon from 'react-native-vector-icons/Ionicons';
 import AntDesign from 'react-native-vector-icons/AntDesign';
 import {AuthenticationContext} from '../Navigation/AuthenticationProvider';
 import {Pressable, ScrollView} from 'react-native';
 import FontAwesome from 'react-native-vector-icons/FontAwesome';
-import {Dimensions} from 'react-native';
 import MaterialIcons from 'react-native-vector-icons/MaterialIcons';
+import Flights from '../Components/Flights/Flight';
+import firestore from '@react-native-firebase/firestore';
+import {Dimensions} from 'react-native';
 
-const Flights = ({item, navigation}) => {
+const Flightss = ({item, navigation}) => {
   return (
     <Pressable onPress={() => navigation.navigate('Ticket', item)}>
       <Box
@@ -130,7 +132,7 @@ const Comments = ({item}) => {
   );
 };
 const Profile = ({navigation}) => {
-  const {logOut} = useContext(AuthenticationContext);
+  const {logOut, user} = useContext(AuthenticationContext);
   const [route, setroute] = useState({
     firstName: 'Samba',
     lastName: 'NDIAYE',
@@ -185,15 +187,32 @@ const Profile = ({navigation}) => {
       },
     ],
   });
+  const [myFlights, setmyFlights] = useState([]);
+  const [loadingMyFlights, setloadingMyFlights] = useState(true);
 
-  const Header = () => {
+  useEffect(async () => {
+    try {
+      await firestore()
+        .collection('flights')
+        .where('publisher.id', '==', user.uid)
+        .get()
+        .then(querySnapshot => {
+          setmyFlights(querySnapshot.docs);
+          console.log(`query`, querySnapshot.size);
+          setloadingMyFlights(false);
+        })
+        .catch(e => console.log(`erreur`, e));
+    } catch (e) {
+      console.log(`erreur`, e);
+    }
+  }, []);
+
+  const Header = ({user}) => {
     return (
       <Box bg="white" pb={3} rounded={(0, 0, 0, 15)}>
         <HStack m={5} height={70}>
           <VStack flex={1}>
-            <Heading>
-              {route.firstName} {route.lastName}
-            </Heading>
+            <Heading>{user.displayName}</Heading>
             <HStack>
               <Ionicon name="location" size={20} color="gray" />
               <Text size="sm" color="gray.500">
@@ -246,21 +265,38 @@ const Profile = ({navigation}) => {
       </Box>
     );
   };
+
   return (
     <NativeBaseProvider>
       <ScrollView>
         <VStack flex={1}>
-          <Header />
+          <Header user={user} />
           <VStack p={5}>
             <Heading size="md" color="blueGray.600" mb={2}>
               Vols
             </Heading>
-            <FlatList
-              data={route.flights}
-              renderItem={({item}) => (
-                <Flights item={item} navigation={navigation} />
-              )}
-            />
+            {loadingMyFlights ? (
+              <Center>
+                <Text>Chargement</Text>
+              </Center>
+            ) : (
+              <FlatList
+                data={myFlights}
+                horizontal
+                renderItem={({item}) => (
+                  <Box m={1}>
+                    <Flights item={item.data()} navigation={navigation} />
+                  </Box>
+                )}
+                ListEmptyComponent={
+                  <HStack justifyContent="space-between" alignItems="center">
+                    <Text>Vous n'avez pas de vol plannifiés</Text>
+                    <Button variant="ghost">Publier </Button>
+                  </HStack>
+                }
+                showsHorizontalScrollIndicator={false}
+              />
+            )}
           </VStack>
           <VStack p={5}>
             <Heading size="md" color="blueGray.600">
@@ -268,8 +304,13 @@ const Profile = ({navigation}) => {
             </Heading>
             <FlatList
               data={route.reviews}
+              horizontal
               nestedScrollEnabled={true}
-              renderItem={({item}) => <Comments item={item} />}
+              renderItem={({item}) => (
+                <Box m={2}>
+                  <Comments item={item} />
+                </Box>
+              )}
             />
           </VStack>
           <Center mb={4}>

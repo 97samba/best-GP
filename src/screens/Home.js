@@ -13,52 +13,17 @@ import {
   View,
   FormControl,
   Avatar,
+  Center,
 } from 'native-base';
-import React, {useState} from 'react';
+import React, {useContext, useEffect, useState} from 'react';
 import {ScrollView} from 'react-native';
 import MaterialIcons from 'react-native-vector-icons/MaterialIcons';
 import Flights from '../Components/Flights/Flight';
-
-const Flightss = ({item}) => {
-  return (
-    <Box
-      ml={2}
-      mb={2}
-      bg="white"
-      border={0.5}
-      borderColor="coolGray.300"
-      p={2}
-      rounded={5}
-      shadow={(1, 1, 1, 1)}>
-      <HStack justifyContent="space-between" alignItems="center" space={3}>
-        <Heading size="lg" color="primary.600">
-          {item.price} {item.currency}
-        </Heading>
-        <HStack alignItems="center">
-          <MaterialIcons name="flight-takeoff" color="gray" size={20} />
-
-          <Text> {item.from}</Text>
-          <Divider width={5} mx={2} size={2} />
-          <Text mr={1}>{item.to}</Text>
-          <MaterialIcons name="flight-land" color="gray" size={20} />
-        </HStack>
-      </HStack>
-
-      <HStack justifyContent="space-between" pt={5}>
-        <VStack>
-          <Text bold>Départ </Text>
-          <Text>{item.departure}</Text>
-        </VStack>
-        <VStack>
-          <Text bold>Dernier dépot</Text>
-          <Text>{item.distribution}</Text>
-        </VStack>
-      </HStack>
-    </Box>
-  );
-};
+import firestore from '@react-native-firebase/firestore';
+import {AuthenticationContext} from '../Navigation/AuthenticationProvider';
 
 const Header = () => {
+  const {user} = useContext(AuthenticationContext);
   return (
     <VStack flex={2} bg="trueGray.100" p={5}>
       <VStack>
@@ -72,7 +37,12 @@ const Header = () => {
               </Text>{' '}
             </Text>
           </VStack>
-          <Avatar bg="trueGray.300">SN</Avatar>
+          <VStack alignItems="center">
+            <Avatar bg="trueGray.300">SN</Avatar>
+            <Heading size="xs" fontWeight="400">
+              {user.displayName.split(' ')[0]}
+            </Heading>
+          </VStack>
         </HStack>
         <HStack>
           <Box width="100%" mt={2} bg="white" px={2} py={1} rounded={10}>
@@ -120,7 +90,7 @@ const Header = () => {
   );
 };
 
-const Publications = ({recent, navigation}) => {
+const Publications = ({loading, recent, navigation}) => {
   return (
     <VStack mt={2} flex={2}>
       <HStack justifyContent="space-between" alignItems="center" px={5}>
@@ -130,16 +100,25 @@ const Publications = ({recent, navigation}) => {
         </Button>
       </HStack>
       <HStack pl={2}>
-        <FlatList
-          horizontal
-          data={recent}
-          renderItem={({item}) => (
-            <Box m={2}>
-              <Flights item={item} navigation={navigation} />
-            </Box>
-          )}
-          showsHorizontalScrollIndicator={false}
-        />
+        {!loading ? (
+          <FlatList
+            horizontal
+            data={recent}
+            renderItem={({item}) => (
+              <Box m={2}>
+                <Flights
+                  item={{...item.data(), id: item.id}}
+                  navigation={navigation}
+                />
+              </Box>
+            )}
+            showsHorizontalScrollIndicator={false}
+          />
+        ) : (
+          <Box p={5} shadow={5} bg="white" width="100%">
+            <Text>chargement</Text>
+          </Box>
+        )}
       </HStack>
     </VStack>
   );
@@ -238,50 +217,19 @@ const Home = ({navigation}) => {
       key: 5,
     },
   ]);
-  const [recent, setrecent] = useState([
-    {
-      departure: 'New York',
-      departureDate: new Date(),
-      depotAdresse: 'Sacré coeur, Dakar',
-      destination: 'Banjul',
-      distributionDate: new Date(),
-      lastDepot: new Date(),
-      pricePerKg: '12',
-      pricePerSuitcase: '200',
-      publisher: {
-        firsName: 'Samba',
-        id: 'ki8Aok1CrWheoEhlhPCH8JS1d742',
-        lastName: 'Ndiaye',
-        phone: '0612345687',
-      },
-      retraitAdresse: 'Barbes Rochechoir, Paris 18',
-      valise: [
-        {key: 1, poids: 23, type: 'soute', unite: 'kg'},
-        {key: 2, poids: 12, type: 'cabine', unite: 'kg'},
-      ],
-    },
-    {
-      departure: 'New York',
-      departureDate: new Date(),
-      depotAdresse: 'Sacré coeur, Dakar',
-      destination: 'Banjul',
-      distributionDate: new Date(),
-      lastDepot: new Date(),
-      pricePerKg: '12',
-      pricePerSuitcase: '200',
-      publisher: {
-        firsName: 'Assane',
-        id: 'ki8Aok1CrWheoEhlhPCH8JS1d742',
-        lastName: 'Ndiaye',
-        phone: '0612345687',
-      },
-      retraitAdresse: 'Barbes Rochechoir, Paris 18',
-      valise: [
-        {key: 1, poids: 23, type: 'soute', unite: 'kg'},
-        {key: 2, poids: 12, type: 'cabine', unite: 'kg'},
-      ],
-    },
-  ]);
+  const [recent, setrecent] = useState([]);
+  const [loadingRecent, setloadingRecent] = useState(true);
+
+  useEffect(async () => {
+    await firestore()
+      .collection('flights')
+      .get()
+      .then(querySnapshot => {
+        setrecent(querySnapshot.docs);
+        setloadingRecent(false);
+      });
+  }, []);
+
   return (
     <NativeBaseProvider>
       {/* <Heading>Home</Heading> */}
@@ -289,7 +237,11 @@ const Home = ({navigation}) => {
         <VStack flex={1} bg="trueGray.100">
           <Header />
           <Destinations popularDestinations={popularDestinations} />
-          <Publications recent={recent} navigation={navigation} />
+          <Publications
+            loading={loadingRecent}
+            recent={recent}
+            navigation={navigation}
+          />
         </VStack>
       </ScrollView>
     </NativeBaseProvider>

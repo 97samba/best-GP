@@ -1,5 +1,15 @@
-import {Box, HStack, VStack, Text, Heading, Button, Select} from 'native-base';
-import React, {useContext} from 'react';
+import {
+  Box,
+  HStack,
+  VStack,
+  Text,
+  Heading,
+  Button,
+  Select,
+  Modal,
+  Pressable,
+} from 'native-base';
+import React, {useContext, useState} from 'react';
 import FontAwesome5 from 'react-native-vector-icons/FontAwesome5';
 import {PublishContext} from '../../screens/Publish';
 
@@ -80,23 +90,13 @@ const Cabine = ({item}) => {
     </HStack>
   );
 };
-
-const Valises = () => {
-  const {bagages} = useContext(PublishContext);
+const SuitCaseAdder = ({isOpen, setIsOpen, addValise}) => {
+  const [itemAdded, setitemAdded] = useState('soute');
+  const [weight, setweight] = useState(23);
   return (
-    <VStack space={2}>
-      <Heading fontSize={20} my={2} color="blueGray.600">
-        Valises
-      </Heading>
-      {bagages.map(bagage =>
-        bagage.type === 'soute' ? (
-          <Soute item={bagage} key={bagage.key} />
-        ) : (
-          <Cabine item={bagage} key={bagage.key} />
-        ),
-      )}
-
+    <VStack>
       <Button
+        onPress={() => setIsOpen(true)}
         bg="blueGray.400"
         _text={{
           color: 'white',
@@ -105,6 +105,126 @@ const Valises = () => {
         size="sm">
         Ajouter une valise
       </Button>
+      <Modal isOpen={isOpen} onClose={() => setIsOpen(false)}>
+        <Modal.Content>
+          <Modal.CloseButton />
+          <Modal.Header>Ajouter une valise</Modal.Header>
+          <Modal.Body>
+            <VStack space={3}>
+              <HStack space={2} alignItems="center">
+                <Heading size="sm" flexGrow={1}>
+                  Type :{' '}
+                </Heading>
+                <Pressable onPress={() => setitemAdded('soute')}>
+                  <HStack
+                    space={2}
+                    bg={itemAdded === 'soute' ? 'blueGray.300' : null}
+                    p={2}
+                    rounded={5}
+                    mx={2}>
+                    <FontAwesome5 name="suitcase" size={20} color="gray" />
+                    <Text>Soute</Text>
+                  </HStack>
+                </Pressable>
+
+                <Pressable onPress={() => setitemAdded('cabine')}>
+                  <HStack
+                    borderRadius={5}
+                    space={2}
+                    p={2}
+                    mx={2}
+                    bg={itemAdded === 'cabine' ? 'blueGray.300' : null}>
+                    <FontAwesome5
+                      name="suitcase-rolling"
+                      size={20}
+                      color="gray"
+                    />
+                    <Text>Cabine</Text>
+                  </HStack>
+                </Pressable>
+              </HStack>
+              <HStack space={2} alignItems="center">
+                <Heading size="sm" flex={1}>
+                  Quantité :{' '}
+                </Heading>
+                {itemAdded === 'soute' ? (
+                  <Select
+                    placeholder="Poids"
+                    flex={2}
+                    selectedValue={weight}
+                    onValueChange={value => setweight(value)}>
+                    <Select.Item value={32} label="32 kg" />
+                    <Select.Item value={23} label="23 kg" />
+                    <Select.Item value={0} label="autre" />
+                  </Select>
+                ) : (
+                  <Select
+                    placeholder="Poids"
+                    flex={2}
+                    selectedValue={weight}
+                    onValueChange={value => setweight(value)}>
+                    <Select.Item value={32} label="12 kg" />
+                    <Select.Item value={23} label="10 kg" />
+                    <Select.Item value={23} label="8 kg" />
+                    <Select.Item value={0} label="autre" />
+                  </Select>
+                )}
+              </HStack>
+            </VStack>
+          </Modal.Body>
+          <Modal.Footer>
+            <Button
+              size="sm"
+              bg="blueGray.400"
+              _text={{color: 'white'}}
+              onPress={() => {
+                addValise(itemAdded, weight, 'kg');
+                setIsOpen(false);
+              }}>
+              Ajouter
+            </Button>
+          </Modal.Footer>
+        </Modal.Content>
+      </Modal>
+    </VStack>
+  );
+};
+
+const Valises = () => {
+  const {bagages, setBagages} = useContext(PublishContext);
+  const [isOpen, setIsOpen] = useState(false);
+
+  const addValise = (type, weight, unit) => {
+    setBagages([
+      ...bagages,
+      {
+        type: type,
+        poids: weight,
+        unite: unit,
+        key: bagages.length + 1,
+      },
+    ]);
+  };
+  return (
+    <VStack space={2}>
+      <Heading fontSize={20} my={2} color="blueGray.600">
+        Valises
+      </Heading>
+      {bagages
+        .sort((a, b) => a.type > b.type)
+        .map(bagage =>
+          bagage.type === 'soute' ? (
+            <Soute item={bagage} key={bagage.key} />
+          ) : (
+            <Cabine item={bagage} key={bagage.key} />
+          ),
+        )}
+
+      <SuitCaseAdder
+        isOpen={isOpen}
+        setIsOpen={setIsOpen}
+        addValise={addValise}
+      />
     </VStack>
   );
 };
