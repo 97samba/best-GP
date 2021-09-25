@@ -3,6 +3,7 @@ import {createNativeStackNavigator} from '@react-navigation/native-stack';
 import TabStack from './TabStack';
 import TicketViewer from '../screens/ProfileViews/TicketViewer';
 import FlightDescription from '../Components/Main/FlightDescription';
+import ReservedView from '../Components/Main/ReservedView';
 
 const Stack = createNativeStackNavigator();
 
@@ -21,10 +22,13 @@ const AppStack = () => {
       />
       <Stack.Screen
         name="FlightDescription"
+        options={{title: 'Réservation'}}
         component={FlightDescription}
-        options={{
-          headerShown: false,
-        }}
+      />
+      <Stack.Screen
+        name="ReservationView"
+        options={{title: 'Réservations'}}
+        component={ReservedView}
       />
     </Stack.Navigator>
   );
