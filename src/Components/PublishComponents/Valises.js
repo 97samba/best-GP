@@ -204,6 +204,7 @@ const Valises = () => {
         key: bagages.length + 1,
       },
     ]);
+    console.log(`bagages`, bagages);
   };
   return (
     <VStack space={2}>

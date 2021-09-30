@@ -27,7 +27,7 @@ const AppStack = () => {
       />
       <Stack.Screen
         name="ReservationView"
-        options={{title: 'Réservations'}}
+        options={{title: 'Réservations', headerShown: false}}
         component={ReservedView}
       />
     </Stack.Navigator>

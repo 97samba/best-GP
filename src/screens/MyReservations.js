@@ -7,9 +7,6 @@ import {
   NativeBaseProvider,
   Text,
   VStack,
-  Divider,
-  Pressable,
-  View,
   Button,
 } from 'native-base';
 import React, {useContext, useEffect, useState} from 'react';
@@ -32,25 +29,23 @@ const MyReservations = ({navigation}) => {
         return collection.data().purchased;
       });
 
-    console.log('first request done', IDs);
-
-    await firestore()
-      .collection('flights')
-      .get()
-      .then(querySnapshot => {
-        var newState = [];
-        querySnapshot.docs.forEach(doc => {
-          if (IDs.includes(doc.id)) {
-            console.log(`doc.id is included`, doc.id);
-            newState.push(doc.data());
-          } else {
-            console.log('not included');
-          }
+    if (IDs) {
+      await firestore()
+        .collection('flights')
+        .get()
+        .then(querySnapshot => {
+          var newState = [];
+          querySnapshot.docs.forEach(doc => {
+            if (IDs.includes(doc.id)) {
+              newState.push(doc.data());
+            }
+          });
+          setFlights(newState);
+          setloadingReservations(false);
         });
-        setFlights(newState);
-        console.log('flights', flights);
-        setloadingReservations(false);
-      });
+    } else {
+      setloadingReservations(false);
+    }
   };
   useEffect(async () => {
     getMyReservations();

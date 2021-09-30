@@ -11,8 +11,11 @@ import {
   Link,
   HStack,
   FormControl,
+  Divider,
+  Icon,
 } from 'native-base';
 import {AuthenticationContext} from '../Navigation/AuthenticationProvider';
+import MaterialIcon from 'react-native-vector-icons/MaterialIcons';
 
 const Login = ({navigation}) => {
   const {login} = useContext(AuthenticationContext);
@@ -37,27 +40,69 @@ const Login = ({navigation}) => {
           </Text>
         </Center>
         <Box p={5}>
-          <FormControl>
-            <Input
-              placeholder="Email"
-              variant="underlined"
-              value={email}
-              isRequired
-              onChangeText={value => setemail(value)}
-            />
+          <FormControl pt={2} isRequired>
+            <HStack alignItems="center" p={2}>
+              <MaterialIcon name="alternate-email" size={20} color="gray" />
+              <Divider orientation="vertical" color="black" m={3} />
+              <VStack space={1}>
+                <Heading
+                  position="absolute"
+                  ml={4}
+                  fontWeight="400"
+                  fontSize="xs">
+                  E-mail
+                </Heading>
+                <Input
+                  placeholder="Email"
+                  variant="unstyled"
+                  value={email}
+                  fontSize={22}
+                  isRequired
+                  onChangeText={value => setemail(value)}
+                />
+              </VStack>
+            </HStack>
+            <Divider />
           </FormControl>
           <FormControl pt={2} isRequired>
-            <Input
-              value={password}
-              placeholder="Mot de Passe"
-              secureTextEntry
-              variant="underlined"
-              onChangeText={value => setpassword(value)}
-            />
+            <HStack alignItems="center" p={2}>
+              <MaterialIcon name="lock" size={20} color="gray" />
+              <Divider orientation="vertical" color="black" m={3} />
+
+              <VStack space={1}>
+                <Heading
+                  position="absolute"
+                  ml={4}
+                  fontWeight="400"
+                  fontSize="xs">
+                  Mot de passe
+                </Heading>
+                <Input
+                  value={password}
+                  placeholder="Mot de Passe"
+                  secureTextEntry
+                  fontSize={22}
+                  variant="unstyled"
+                  onChangeText={value => setpassword(value)}
+                />
+              </VStack>
+            </HStack>
+            <Divider />
           </FormControl>
         </Box>
-        <Center pt={5}>
-          <Button size="lg" width={150} onPress={validateLogin}>
+        <Center>
+          <Link>
+            <Text color="blueGray.600">Mot de passe oublié ?</Text>
+          </Link>
+
+          <Button
+            mt={5}
+            size="lg"
+            bg="blueGray.400"
+            _text={{color: 'white'}}
+            width={300}
+            rounded={40}
+            onPress={validateLogin}>
             Login
           </Button>
         </Center>

@@ -73,15 +73,13 @@ const Publish = () => {
 
   //contact
   const [userName, setuserName] = useState();
-  // user.displayName.split(' ')[1] || null,
   const [userFirstName, setuserFirstName] = useState();
-  // user.displayName.split(' ')[0] || null,
   const [userPhoneNumber, setuserPhoneNumber] = useState('0612345687');
   const [userPoneNumberPrivacy, setuserPoneNumberPrivacy] = useState('public');
 
   //tarifications
-  const [pricePerKg, setpricePerKg] = useState(10);
-  const [pricePerSuitcase, setpricePerSuitcase] = useState(200);
+  const [pricePerKg, setpricePerKg] = useState('10');
+  const [pricePerSuitcase, setpricePerSuitcase] = useState('200');
 
   const handleSave = () => {
     //verify vol
