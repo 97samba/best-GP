@@ -24,8 +24,8 @@ import {
   makeReservationWeight,
 } from '../../utils/Middlewares/FlighDescriptionMiddleware';
 import IonIcon from 'react-native-vector-icons/Ionicons';
-import {SafeAreaView} from 'react-native';
 import {AuthenticationContext} from '../../Navigation/AuthenticationProvider';
+
 const Countries = ({route}) => {
   return (
     <Box>
@@ -379,6 +379,7 @@ const Dates = ({route}) => {
     </HStack>
   );
 };
+
 const PaymentType = () => {
   const {paymentMethod, setpaymentMethod, shipping, setshipping} =
     useContext(ReservationContext);

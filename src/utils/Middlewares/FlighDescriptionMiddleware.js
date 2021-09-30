@@ -25,13 +25,27 @@ export const makeReservationWeight = async (
   console.log(`idReservation`, idReservation);
   console.log(`userID`, userID);
 
-  const document = await firestore().collection('users').doc(userID);
-  var purchased = (await document.get()).data().purchased;
-  if (purchased.includes(idReservation)) {
-    console.log(`deja réserver`);
-    return;
-  }
-  purchased.push(idReservation);
-  console.log(`purchased`, purchased);
-  document.update({purchased: purchased});
+  // const document = await firestore().collection('users').doc(userID);
+  // var purchased = (await document.get()).data().purchased;
+  // if (purchased.includes(idReservation)) {
+  //   console.log(`deja réserver`);
+  //   return;
+  // }
+  // purchased.push(idReservation);
+  // console.log(`purchased`, purchased);
+  // document.update({purchased: purchased});
+
+  const reservation = {
+    flightId: idReservation,
+    userId: userID,
+    price: price,
+    weight: weight,
+  };
+  const documents = firestore().collection('reservations');
+
+  documents.add();
+
+  documents.get().then(querySnapshot => {
+    querySnapshot.docs.forEach(doc => console.log(`doc`, doc));
+  });
 };
