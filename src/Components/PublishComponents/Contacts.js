@@ -8,21 +8,33 @@ import {
   Modal,
   Pressable,
   Text,
+  Box,
+  Divider,
 } from 'native-base';
 import React, {useContext, useState} from 'react';
 import MaterialIcon from 'react-native-vector-icons/MaterialIcons';
 import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
-import FontAwesome5 from 'react-native-vector-icons/FontAwesome5';
 
 import {PublishContext} from '../../screens/Publish';
 
 const ContactAdder = ({isOpen, setIsOpen, addContact}) => {
   const [state, setstate] = useState({
-    firstName: '',
-    lastName: '',
+    userFirstName: '',
+    userLastName: '',
     role: 'distribution',
     userPhoneNumber: '',
   });
+
+  const handleValidate = () => {
+    console.log(`state`, state);
+    if (state.userFirstName != '' && state.userPhoneNumber != '') {
+      addContact(state);
+      setIsOpen(false);
+    } else {
+      console.log('remplisser les informations');
+    }
+  };
+
   return (
     <VStack>
       <Button
@@ -83,12 +95,13 @@ const ContactAdder = ({isOpen, setIsOpen, addContact}) => {
 
             <VStack space={2} mt={2}>
               <Input
-                // value={userFirstName}
+                value={state.userFirstName}
                 // onChangeText={text => setuserFirstName(text)}
                 rounded={4}
                 variant="unstyled"
                 bg="white"
                 placeholder="Prénom"
+                onChangeText={text => setstate({...state, userFirstName: text})}
                 InputLeftElement={
                   <MaterialIcon
                     name="person"
@@ -99,11 +112,11 @@ const ContactAdder = ({isOpen, setIsOpen, addContact}) => {
                 }
               />
               <Input
-                // value={userName}
+                value={state.userLastName}
                 rounded={4}
                 variant="unstyled"
                 bg="white"
-                // onChangeText={value => setuserName(value)}
+                onChangeText={text => setstate({...state, userLastName: text})}
                 placeholder="NOM"
                 InputLeftElement={
                   <MaterialIcon
@@ -115,12 +128,14 @@ const ContactAdder = ({isOpen, setIsOpen, addContact}) => {
                 }
               />
               <Input
-                // value={userPhoneNumber}
+                value={state.userPhoneNumber}
                 rounded={4}
                 variant="unstyled"
                 bg="white"
                 placeholder="Mon numéro"
-                // onChangeText={value => setuserPhoneNumber(value)}
+                onChangeText={text =>
+                  setstate({...state, userPhoneNumber: text})
+                }
                 InputLeftElement={
                   <MaterialIcon
                     name="call"
@@ -150,12 +165,7 @@ const ContactAdder = ({isOpen, setIsOpen, addContact}) => {
             </VStack>
           </Modal.Body>
           <Modal.Footer>
-            <Button
-              size="sm"
-              bg="blueGray.400"
-              onPress={() => {
-                setIsOpen(false);
-              }}>
+            <Button size="sm" bg="blueGray.400" onPress={handleValidate}>
               Valider
             </Button>
           </Modal.Footer>
@@ -167,24 +177,35 @@ const ContactAdder = ({isOpen, setIsOpen, addContact}) => {
 
 const Contacts = () => {
   const {
-    userName,
+    contacts,
+    setcontacts,
     setuserName,
-    userFirstName,
     setuserFirstName,
-    userPhoneNumber,
     setuserPhoneNumber,
-    userPoneNumberPrivacy,
     setuserPoneNumberPrivacy,
   } = useContext(PublishContext);
 
   const [isOpen, setisOpen] = useState(false);
+
+  const addContact = state => {
+    var newState = contacts;
+    newState.others.push({...state, id: contacts.others.length});
+    console.log(`newstate`, newState);
+    setcontacts(newState);
+  };
+
+  const deleteContact = id => {
+    var newState = contacts.others.filter(contact => contact.id != id);
+    setcontacts({...contacts, others: newState});
+  };
+
   return (
     <VStack space={2}>
       <Heading fontSize={20} my={2} color="blueGray.600">
         Contacts
       </Heading>
       <Input
-        value={userFirstName}
+        value={contacts.principal.userFirstName}
         onChangeText={text => setuserFirstName(text)}
         rounded={4}
         variant="unstyled"
@@ -200,7 +221,7 @@ const Contacts = () => {
         }
       />
       <Input
-        value={userName}
+        value={contacts.principal.userName}
         rounded={4}
         variant="unstyled"
         bg="white"
@@ -216,7 +237,7 @@ const Contacts = () => {
         }
       />
       <Input
-        value={userPhoneNumber}
+        value={contacts.principal.userPhoneNumber}
         rounded={4}
         variant="unstyled"
         bg="white"
@@ -234,7 +255,7 @@ const Contacts = () => {
           <Select
             minWidth={160}
             placeholder="Visibilité"
-            selectedValue={userPoneNumberPrivacy}
+            selectedValue={contacts.principal.userPoneNumberPrivacy}
             onValueChange={value => setuserPoneNumberPrivacy(value)}
             borderColor="white">
             <Select.Item label={'Privé'} value="private" />
@@ -248,7 +269,41 @@ const Contacts = () => {
           </Select>
         }
       />
-      <ContactAdder isOpen={isOpen} setIsOpen={setisOpen} />
+      {contacts.others.length > 0 ? (
+        <VStack>
+          <Heading my={2} size="sm" color="blueGray.600">
+            Autre(s) contact(s)
+          </Heading>
+          {contacts.others.map((contact, index) => (
+            <HStack
+              key={index}
+              p={3}
+              rounded={10}
+              bg="white"
+              alignItems="center">
+              <MaterialIcon name="person-outline" size={20} color="tomato" />
+              <HStack ml={3} space={2} flex={1}>
+                <Text numberOfLines={1}>
+                  {contact.userFirstName}, {contact.userLastName}
+                </Text>
+              </HStack>
+              <Divider orientation="vertical" />
+
+              <Text ml={3} numberOfLines={1} flex={1}>
+                {contact.userPhoneNumber}
+              </Text>
+              <Pressable onPress={() => deleteContact(contact.id)}>
+                <MaterialIcon name="delete" size={25} color="tomato" />
+              </Pressable>
+            </HStack>
+          ))}
+        </VStack>
+      ) : null}
+      <ContactAdder
+        isOpen={isOpen}
+        setIsOpen={setisOpen}
+        addContact={addContact}
+      />
     </VStack>
   );
 };

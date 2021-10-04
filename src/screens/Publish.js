@@ -46,22 +46,26 @@ const Publish = () => {
 
   //dates
   const [departureDate, setdepartureDate] = useState(new Date());
-  const [lastDepot, setLastDepot] = useState(new Date());
-  const [distributionDate, setdistributionDate] = useState(new Date());
+  const [lastDepot, setLastDepot] = useState(
+    new Date().setDate(departureDate.getDate() - 1),
+  );
+  const [distributionDate, setdistributionDate] = useState(
+    new Date().setDate(departureDate.getDate() + 1),
+  );
 
   //Valises
   const [bagages, setBagages] = useState([
     {
       type: 'soute',
-      poids: 32,
+      poids: 23,
       unite: 'kg',
-      key: 1,
+      key: 0,
     },
     {
       type: 'cabine',
       poids: 12,
       unite: 'kg',
-      key: 2,
+      key: 1,
     },
   ]);
 
@@ -72,10 +76,21 @@ const Publish = () => {
   );
 
   //contact
-  const [userName, setuserName] = useState();
-  const [userFirstName, setuserFirstName] = useState();
+  const [userFirstName, setuserFirstName] = useState(
+    user.displayName.split(' ')[0],
+  );
+  const [userName, setuserName] = useState(user.displayName.split(' ')[1]);
   const [userPhoneNumber, setuserPhoneNumber] = useState('0612345687');
   const [userPoneNumberPrivacy, setuserPoneNumberPrivacy] = useState('public');
+  const [contacts, setcontacts] = useState({
+    principal: {
+      userFirstName: userFirstName,
+      userName: userName,
+      userPhoneNumber: userPhoneNumber,
+      userPoneNumberPrivacy: userPoneNumberPrivacy,
+    },
+    others: [],
+  });
 
   //tarifications
   const [pricePerKg, setpricePerKg] = useState('10');
@@ -117,12 +132,17 @@ const Publish = () => {
       .add(item)
       .then(() => console.log('done'));
   };
+  useEffect(() => {
+    console.log(`user`, user);
+  });
 
   return (
     <NativeBaseProvider>
       <ScrollView>
         <PublishContext.Provider
           value={{
+            contacts,
+            setcontacts,
             departure,
             setdeparture,
             destination,

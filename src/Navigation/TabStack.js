@@ -2,7 +2,7 @@ import React from 'react';
 import Home from '../screens/Home';
 import {createBottomTabNavigator} from '@react-navigation/bottom-tabs';
 import Profile from '../screens/Profile';
-import Search from '../screens/Search';
+import SearchResults from '../screens/SearchResults';
 import Ionicons from 'react-native-vector-icons/Ionicons';
 import FontAwesome from 'react-native-vector-icons/FontAwesome';
 import MaterialIcon from 'react-native-vector-icons/MaterialIcons';
@@ -29,10 +29,10 @@ const TabStack = () => {
         }}
       />
       <Stack.Screen
-        name="Search"
-        component={Search}
+        name="SearchResults"
+        component={SearchResults}
         options={{
-          title: 'Search',
+          title: 'SearchResults',
           tabBarIcon: ({focused, color, size}) => {
             return <Ionicons name="search" size={size} color={color} />;
           },

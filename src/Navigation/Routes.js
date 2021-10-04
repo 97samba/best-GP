@@ -9,7 +9,17 @@ const Routes = () => {
   const [initializing, setinitializing] = useState(true);
   const {user, setuser} = useContext(AuthenticationContext);
 
-  const onAuthStateChanged = user => {
+  const onAuthStateChanged = async user => {
+    // var informations = {};
+    // if (user) {
+    //   console.log(`user.uid`, user.uid);
+    //   await firestore()
+    //     .collection('users')
+    //     .doc(user.uid)
+    //     .get()
+    //     .then(query => (informations = {...query.data()}));
+    // }
+    console.log(`user`, user);
     setuser(user);
     user && user.displayName === null
       ? user.updateProfile({displayName: 'Utilisateur'})

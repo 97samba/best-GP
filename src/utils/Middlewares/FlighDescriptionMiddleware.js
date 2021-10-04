@@ -1,51 +1,55 @@
 import firestore from '@react-native-firebase/firestore';
-import {useContext} from 'react';
 
 const verifyArgs = type => {
   return true;
 };
 
-export const calculatePricePerKG = (type, weight, pricePerKg) => {
+export const calculatePricePerKG = (type, weight, shipping, pricePerKg) => {
   if (verifyArgs(type)) {
   }
 
-  return weight * pricePerKg;
+  return shipping ? weight * pricePerKg + 2 : weight * pricePerKg;
 };
 
 export const makeReservationWeight = async (
-  idReservation,
+  idFlight,
   price,
   weight,
   shipping,
   userID,
+  paymentMethod,
 ) => {
   console.log(`price`, price);
   console.log(`weight`, weight);
   console.log(`shipping`, shipping);
-  console.log(`idReservation`, idReservation);
+  console.log(`idFlight`, idFlight);
   console.log(`userID`, userID);
-
-  // const document = await firestore().collection('users').doc(userID);
-  // var purchased = (await document.get()).data().purchased;
-  // if (purchased.includes(idReservation)) {
-  //   console.log(`deja réserver`);
-  //   return;
-  // }
-  // purchased.push(idReservation);
-  // console.log(`purchased`, purchased);
-  // document.update({purchased: purchased});
+  console.log(`shipping`, shipping);
+  console.log(`paymentMethod`, paymentMethod);
 
   const reservation = {
-    flightId: idReservation,
+    flightId: idFlight,
     userId: userID,
-    price: price,
+    price: calculatePricePerKG('weight', weight, shipping, price),
     weight: weight,
+    paymentMethod: paymentMethod,
+    shipping: shipping,
+    reservationDate: new Date(),
   };
-  const documents = firestore().collection('reservations');
+  //normally on batch
+  await firestore()
+    .collection('flights')
+    .doc(idFlight)
+    .update({
+      reservations: firestore.FieldValue.arrayUnion({
+        userID: userID,
+        weight: weight,
+        price: reservation.price,
+        date: new Date(),
+      }),
+    });
 
-  documents.add();
+  const documents = await firestore().collection('reservations');
 
-  documents.get().then(querySnapshot => {
-    querySnapshot.docs.forEach(doc => console.log(`doc`, doc));
-  });
+  // await documents.add(reservation);
 };

@@ -14,6 +14,7 @@ import {
   FormControl,
   Avatar,
   Center,
+  Pressable,
 } from 'native-base';
 import React, {useContext, useEffect, useState} from 'react';
 import {ScrollView} from 'react-native';
@@ -21,6 +22,7 @@ import MaterialIcons from 'react-native-vector-icons/MaterialIcons';
 import Flights from '../Components/Flights/Flight';
 import firestore from '@react-native-firebase/firestore';
 import {AuthenticationContext} from '../Navigation/AuthenticationProvider';
+import FontAwesome from 'react-native-vector-icons/FontAwesome';
 
 const Header = () => {
   const {user} = useContext(AuthenticationContext);
@@ -44,7 +46,7 @@ const Header = () => {
             </Heading>
           </VStack>
         </HStack>
-        <HStack>
+        <HStack flex={1}>
           <Box width="100%" mt={2} bg="white" px={2} py={1} rounded={10}>
             <FormControl>
               <Input
@@ -67,7 +69,7 @@ const Header = () => {
 
             <FormControl>
               <Input
-                mt={2}
+                // mt={2}
                 fontSize={16}
                 placeholder="Destination"
                 variant="unstyled"
@@ -84,6 +86,24 @@ const Header = () => {
               />
             </FormControl>
           </Box>
+        </HStack>
+        <HStack flex={1} my={2} alignItems="center" space={2}>
+          <Button bg="white" rounded={10} flex={3}>
+            <Heading size="sm" fontWeight="500" color="trueGray.600">
+              22 octobre 2021
+            </Heading>
+          </Button>
+          {/* <Pressable flex={1} p={2} bg="white">
+            <FontAwesome name="exchange" size={20} color="gray" />
+          </Pressable> */}
+          <Button
+            flex={2}
+            bg="blueGray.300"
+            endIcon={<FontAwesome name="search" size={17} color="white" />}>
+            <Heading size="sm" color="trueGray.500" fontWeight="500">
+              Rechercher
+            </Heading>
+          </Button>
         </HStack>
       </VStack>
     </VStack>
@@ -115,7 +135,7 @@ const Publications = ({loading, recent, navigation}) => {
             showsHorizontalScrollIndicator={false}
           />
         ) : (
-          <Box p={5} shadow={5} bg="white" width="100%">
+          <Box p={10} shadow={5} bg="white" width="100%">
             <Text>chargement</Text>
           </Box>
         )}

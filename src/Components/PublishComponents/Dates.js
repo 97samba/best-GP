@@ -1,24 +1,10 @@
-import {
-  Box,
-  HStack,
-  NativeBaseProvider,
-  VStack,
-  Text,
-  Heading,
-  Input,
-  Button,
-  Select,
-  ScrollView,
-  Center,
-} from 'native-base';
-import React, {useState, createContext, useContext, useEffect} from 'react';
-import MaterialIcon from 'react-native-vector-icons/MaterialIcons';
+import {Box, HStack, VStack, Text, Heading, Center} from 'native-base';
+import React, {useState, useContext} from 'react';
 import FontAwesome5 from 'react-native-vector-icons/FontAwesome5';
 import DateTimePicker from '@react-native-community/datetimepicker';
 import {TouchableOpacity} from 'react-native';
-import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
-import IonIcon from 'react-native-vector-icons/Ionicons';
 import {PublishContext} from '../../screens/Publish';
+import moment from 'moment';
 
 const Dates = () => {
   const {
@@ -36,8 +22,13 @@ const Dates = () => {
 
   const HandleDateChanged = (date, setDate, optionDate, show) => {
     date ? setDate(date) : setDate(optionDate);
+
     console.log(`date : `, date);
     show(false);
+  };
+  const validateDate = () => {
+    setLastDepot(new Date().setDate(departureDate.getDate() - 1));
+    setdistributionDate(new Date().setDate(departureDate.getDate() + 1));
   };
 
   return (
@@ -57,12 +48,13 @@ const Dates = () => {
                 departureDate,
                 setshowDeparture,
               );
+              validateDate('departure');
             }}
             mode="datetime"
           />
         </Center>
       )}
-      <HStack space={3} bg="white" py={4} rounded={5} alignItems="center">
+      <HStack space={3} bg="white" py={2} rounded={5} alignItems="center">
         <FontAwesome5
           name="calendar-alt"
           size={20}
@@ -75,7 +67,7 @@ const Dates = () => {
               setshowDeparture(true);
             }}>
             <Text color="gray.400">Date de départ</Text>
-            <Text>{departureDate && departureDate.toLocaleDateString()}</Text>
+            <Text>{moment(departureDate).format('LL')}</Text>
           </TouchableOpacity>
         </Box>
       </HStack>
@@ -90,7 +82,7 @@ const Dates = () => {
           />
         </Center>
       )}
-      <HStack space={3} bg="white" py={4} rounded={5} alignItems="center">
+      <HStack space={3} bg="white" py={2} rounded={5} alignItems="center">
         <FontAwesome5
           name="calendar-times"
           size={20}
@@ -100,7 +92,7 @@ const Dates = () => {
         <Box width="80%">
           <TouchableOpacity onPress={() => setshowLastDepot(true)}>
             <Text color="gray.400">Dernier dépot</Text>
-            <Text>{lastDepot && lastDepot.toLocaleDateString()}</Text>
+            <Text>{moment(lastDepot).format('LL')}</Text>
           </TouchableOpacity>
         </Box>
       </HStack>
@@ -120,7 +112,7 @@ const Dates = () => {
           />
         </Center>
       )}
-      <HStack space={3} bg="white" py={4} rounded={5} alignItems="center">
+      <HStack space={3} bg="white" py={2} rounded={5} alignItems="center">
         <FontAwesome5
           name="calendar-check"
           size={20}
@@ -133,9 +125,7 @@ const Dates = () => {
               setshowArrival(true);
             }}>
             <Text color="gray.400">Date de distribution</Text>
-            <Text>
-              {distributionDate && distributionDate.toLocaleDateString()}
-            </Text>
+            <Text>{moment(distributionDate).format('LL')}</Text>
           </TouchableOpacity>
         </Box>
       </HStack>

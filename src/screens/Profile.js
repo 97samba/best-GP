@@ -273,7 +273,7 @@ const Profile = ({navigation}) => {
           <Header user={user} />
           <VStack p={5}>
             <Heading size="md" color="blueGray.600" mb={2}>
-              Vols
+              Mes vols
             </Heading>
             {loadingMyFlights ? (
               <Center>

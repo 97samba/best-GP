@@ -11,11 +11,14 @@ import {
 } from 'native-base';
 import React, {useContext, useState} from 'react';
 import FontAwesome5 from 'react-native-vector-icons/FontAwesome5';
+import MaterialIcon from 'react-native-vector-icons/MaterialIcons';
 import {PublishContext} from '../../screens/Publish';
 
 const Soute = ({item}) => {
   const {bagages, setBagages} = useContext(PublishContext);
-
+  const deleteSuitcase = () => {
+    setBagages(bagages.filter(bagage => bagage.key != item.key));
+  };
   const handleWeightChange = value => {
     const newState = bagages.map(bagage => {
       if (bagage.key === item.key) {
@@ -35,9 +38,12 @@ const Soute = ({item}) => {
         style={{marginLeft: 10}}
       />
       <Text flexGrow={1}>Soute</Text>
+      <Pressable onPress={deleteSuitcase}>
+        <MaterialIcon name="delete" size={20} color="tomato" />
+      </Pressable>
       <Box>
         <Select
-          minWidth={150}
+          minWidth={110}
           height={45}
           placeholder="Poids"
           selectedValue={item.poids}
@@ -45,7 +51,6 @@ const Soute = ({item}) => {
           borderColor="white">
           <Select.Item label={'23 kg'} value={23} />
           <Select.Item label={'32 kg'} value={32} />
-          <Select.Item label={'Supprimer'} value={0} />
         </Select>
       </Box>
     </HStack>
@@ -55,6 +60,9 @@ const Soute = ({item}) => {
 const Cabine = ({item}) => {
   const {bagages, setBagages} = useContext(PublishContext);
 
+  const deleteSuitcase = () => {
+    setBagages(bagages.filter(bagage => bagage.key != item.key));
+  };
   const handleWeightChange = value => {
     const newState = bagages.map(bagage => {
       if (bagage.key === item.key) {
@@ -66,7 +74,7 @@ const Cabine = ({item}) => {
     setBagages(newState);
   };
   return (
-    <HStack space={3} bg="white" py={1} rounded={5} alignItems="center">
+    <HStack space={3} bg="white" rounded={5} alignItems="center">
       <FontAwesome5
         name="suitcase-rolling"
         size={20}
@@ -74,9 +82,12 @@ const Cabine = ({item}) => {
         style={{marginLeft: 10}}
       />
       <Text flexGrow={1}>Cabine</Text>
+      <Pressable onPress={deleteSuitcase}>
+        <MaterialIcon name="delete" size={20} color="tomato" />
+      </Pressable>
       <Box>
         <Select
-          minWidth={150}
+          minWidth={110}
           placeholder="Poids"
           borderColor="white"
           onValueChange={handleWeightChange}
@@ -84,12 +95,12 @@ const Cabine = ({item}) => {
           <Select.Item label={'10 kg'} value={10} />
           <Select.Item label={'12 kg'} value={12} />
           <Select.Item label={'14 kg'} value={14} />
-          <Select.Item label={'Supprimer'} value={0} />
         </Select>
       </Box>
     </HStack>
   );
 };
+
 const SuitCaseAdder = ({isOpen, setIsOpen, addValise}) => {
   const [itemAdded, setitemAdded] = useState('soute');
   const [weight, setweight] = useState(23);
@@ -201,7 +212,7 @@ const Valises = () => {
         type: type,
         poids: weight,
         unite: unit,
-        key: bagages.length + 1,
+        key: bagages.length,
       },
     ]);
     console.log(`bagages`, bagages);

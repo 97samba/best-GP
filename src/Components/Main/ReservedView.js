@@ -16,9 +16,11 @@ import React, {useContext, useEffect, useState} from 'react';
 import MaterialIcon from 'react-native-vector-icons/MaterialIcons';
 import Ionicon from 'react-native-vector-icons/Ionicons';
 import FontAwesome from 'react-native-vector-icons/FontAwesome';
+import FontAwesome5 from 'react-native-vector-icons/FontAwesome5';
 import QRCode from 'react-native-qrcode-svg';
 import {AuthenticationContext} from '../../Navigation/AuthenticationProvider';
 import DashedLine from 'react-native-dashed-line';
+import moment from 'moment';
 
 const Notch = () => {
   return (
@@ -50,15 +52,15 @@ const Notch = () => {
   );
 };
 
-const ETicket = ({route, user}) => {
+const ETicket = ({item, user}) => {
   const [QRCodeValue, setQRCodeValue] = useState('false');
   const [QRCodeOpen, setQRCodeOpen] = useState(false);
   const getQRCodeValue = () => {
     const value = {
       uid: user.uid,
       displayName: user.displayName,
-      departure: route.params.departure,
-      destination: route.params.destination,
+      departure: item.departure,
+      destination: item.destination,
     };
     setQRCodeValue(JSON.stringify(value));
   };
@@ -102,6 +104,7 @@ const ETicket = ({route, user}) => {
 
 const ReservedView = ({navigation, route}) => {
   const {user} = useContext(AuthenticationContext);
+  const {item, informations} = route.params;
 
   return (
     <NativeBaseProvider>
@@ -119,7 +122,7 @@ const ReservedView = ({navigation, route}) => {
             bg="blueGray.300"
             _text={{fontSize: 14, color: 'gray.600'}}
             size={12}>
-            {route.params.departure[0]}
+            {item.departure[0]}
           </Avatar>
         </HStack>
         <HStack
@@ -129,8 +132,7 @@ const ReservedView = ({navigation, route}) => {
           justifyContent="space-between"
           alignItems="center">
           <Heading size="xl" color="white">
-            {route.params.departure.charAt(0).toUpperCase() +
-              route.params.departure.slice(1)}
+            {item.departure.charAt(0).toUpperCase() + item.departure.slice(1)}
           </Heading>
           <VStack justifyContent="center" alignItems="center">
             <HStack alignItems="center" space={2}>
@@ -140,8 +142,8 @@ const ReservedView = ({navigation, route}) => {
             </HStack>
           </VStack>
           <Heading size="xl" color="white">
-            {route.params.destination.charAt(0).toUpperCase() +
-              route.params.destination.slice(1)}
+            {item.destination.charAt(0).toUpperCase() +
+              item.destination.slice(1)}
           </Heading>
         </HStack>
         {/* <HStack justifyContent="center">
@@ -158,11 +160,11 @@ const ReservedView = ({navigation, route}) => {
                   bg="blueGray.300"
                   _text={{fontSize: 14, color: 'gray.600'}}
                   size={10}>
-                  {route.params.departure[0]}
+                  {item.departure[0]}
                 </Avatar>
 
                 <HStack space={1} alignItems="center">
-                  <Text fontSize="xs">{route.params.publisher.firstName}</Text>
+                  <Text fontSize="xs">{item.publisher.firstName}</Text>
                   <FontAwesome name="check-circle" size={14} color="gray" />
                 </HStack>
               </HStack>
@@ -185,7 +187,9 @@ const ReservedView = ({navigation, route}) => {
                   <Heading size="sm" fontWeight="400" color="trueGray.500">
                     Distribution
                   </Heading>
-                  <Heading size="sm">03/09/2021</Heading>
+                  <Heading size="sm">
+                    {moment(item.distributionDate.toDate()).format('ll')}
+                  </Heading>
                 </VStack>
                 <VStack space={1} flex={1}>
                   <Heading size="sm" fontWeight="400" color="trueGray.500">
@@ -215,7 +219,7 @@ const ReservedView = ({navigation, route}) => {
                   <Heading size="sm">774562345</Heading>
                 </VStack>
               </HStack>
-              <Divider />
+              <Divider my={1} />
               <HStack alignItems="flex-end" justifyContent="space-between">
                 {/* price */}
                 <VStack space={1} flex={1}>
@@ -227,10 +231,11 @@ const ReservedView = ({navigation, route}) => {
                       ${' '}
                     </Heading>
                     <Heading size="md" color="gold" fontWeight="500">
-                      15
+                      {informations.price}
                     </Heading>
                   </HStack>
                 </VStack>
+
                 {/* image */}
                 <Button
                   bg="blueGray.100"
@@ -242,9 +247,24 @@ const ReservedView = ({navigation, route}) => {
                   Images de l'article
                 </Button>
               </HStack>
+              {informations.shipping ? (
+                <HStack alignItems="center" space={1}>
+                  <Heading size="sm" style={{color: 'green'}} fontWeight="400">
+                    Livraison gratuite
+                  </Heading>
+                  <FontAwesome5 name="shipping-fast" size={17} color="green" />
+                </HStack>
+              ) : (
+                <HStack alignItems="center" space={1}>
+                  <Heading size="sm" style={{color: 'gray'}} fontWeight="400">
+                    Demander une livraison
+                  </Heading>
+                  <FontAwesome5 name="shipping-fast" size={17} color="gray" />
+                </HStack>
+              )}
             </VStack>
           </Box>
-          <ETicket route={route} user={user} />
+          <ETicket item={item} user={user} />
         </Box>
       </VStack>
     </NativeBaseProvider>
