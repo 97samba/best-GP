@@ -16,12 +16,12 @@ import Flights from '../Components/Flights/Flight';
 import MaterialIcon from 'react-native-vector-icons/MaterialIcons';
 import Fontisto from 'react-native-vector-icons/Fontisto';
 import AntDesign from 'react-native-vector-icons/AntDesign';
-import firestore from '@react-native-firebase/firestore';
 import {Pressable} from 'react-native';
 import moment from 'moment';
 import FontAwesome5Icon from 'react-native-vector-icons/FontAwesome5';
 import {findResults} from '../utils/Middlewares/SearchMiddleware';
-import {GooglePlacesAutocomplete} from 'react-native-google-places-autocomplete';
+import DateTimePicker from '@react-native-community/datetimepicker';
+
 const googleApiKeys = 'AIzaSyAX0YkjIk2rljrKmWZRKfwbq4R7XP189Oc';
 const SearchMenu = () => {
   const [error, seterror] = useState(false);
@@ -33,6 +33,10 @@ const SearchMenu = () => {
     setdeparture,
     setresults,
     setloading,
+    bagageType,
+    setbagageType,
+    date,
+    setdate,
   } = useContext(ResearchContext);
   const handleResults = async () => {
     if (departure === '' && destination === '') {
@@ -41,16 +45,20 @@ const SearchMenu = () => {
     }
     error && seterror(false);
     setloading(false);
+
     setresults(
-      await findResults(
-        departure,
-        destination,
-        new Date(),
-        'suitcase',
-        'promo',
-      ),
+      await findResults(departure, destination, date, 'suitcase', 'promo'),
     );
     setsearching(false);
+  };
+  const [dateModalOpen, setdateModalOpen] = useState(false);
+
+  const permutCities = () => {
+    var newDeparture = destination;
+    var newDestination = departure;
+
+    setdeparture(newDeparture);
+    setdestination(newDestination);
   };
   return (
     <Box flex={1}>
@@ -109,12 +117,14 @@ const SearchMenu = () => {
             felx={1}>
             <Divider flex={5} />
             <Box flex={1}>
-              <AntDesign
-                style={{rotation: 90}}
-                name="swap"
-                size={30}
-                color="gray"
-              />
+              <Pressable onPress={permutCities}>
+                <AntDesign
+                  style={{rotation: 90}}
+                  name="swap"
+                  size={30}
+                  color="gray"
+                />
+              </Pressable>
             </Box>
           </HStack>
           <Text mt={2} ml={4} fontSize={15} color="pink.800">
@@ -131,14 +141,24 @@ const SearchMenu = () => {
         </Box>
         <Box rounded={10} bg="white" px={5} py={3}>
           <Text color="pink.800">Date</Text>
-          <HStack mt={2} alignItems="center" justifyContent="space-between">
-            <Pressable onPress={() => console.log('pressed')}>
+          <Pressable onPress={() => setdateModalOpen(true)}>
+            <HStack mt={2} alignItems="center" justifyContent="space-between">
               <Heading size="md" fontWeight="400" color="blueGray.600">
-                {moment(new Date()).format('LL')}
+                {moment(date).format('LL')}
               </Heading>
-            </Pressable>
-            <AntDesign name="calendar" size={25} color="gray" />
-          </HStack>
+              <AntDesign name="calendar" size={25} color="gray" />
+            </HStack>
+          </Pressable>
+          {dateModalOpen ? (
+            <DateTimePicker
+              value={date}
+              testID="date"
+              onChange={(e, date) => {
+                setdate(date), setdateModalOpen(false);
+              }}
+              mode="datetime"
+            />
+          ) : null}
         </Box>
         <Box mt={4} rounded={10} bg="white" px={5} py={2}>
           <HStack p={1} alignItems="center">
@@ -146,19 +166,28 @@ const SearchMenu = () => {
               Type
             </Text>
             <HStack flex={1} justifyContent="space-between">
-              <VStack
-                p={2}
-                width={20}
-                rounded={5}
-                bg="trueGray.200"
-                alignItems="center">
-                <FontAwesome5Icon name="box-open" size={20} color="gray" />
-                <Text>Colis</Text>
-              </VStack>
-              <VStack p={2} width={20} rounded={5} alignItems="center">
-                <FontAwesome5Icon name="suitcase" size={20} color="gray" />
-                <Text>Valise</Text>
-              </VStack>
+              <Pressable onPress={() => setbagageType('box')}>
+                <VStack
+                  p={2}
+                  width={20}
+                  rounded={5}
+                  bg={bagageType === 'box' ? 'gray.200' : 'white'}
+                  alignItems="center">
+                  <FontAwesome5Icon name="box-open" size={20} color="gray" />
+                  <Text>Colis</Text>
+                </VStack>
+              </Pressable>
+              <Pressable onPress={() => setbagageType('suitcase')}>
+                <VStack
+                  p={2}
+                  width={20}
+                  rounded={5}
+                  alignItems="center"
+                  bg={bagageType === 'suitcase' ? 'gray.200' : 'white'}>
+                  <FontAwesome5Icon name="suitcase" size={20} color="gray" />
+                  <Text>Valise</Text>
+                </VStack>
+              </Pressable>
             </HStack>
           </HStack>
         </Box>
@@ -235,8 +264,10 @@ const SearchResults = ({navigation}) => {
   const [results, setresults] = useState([]);
   const [searching, setsearching] = useState(true);
   const [departure, setdeparture] = useState('dakar');
+  const [bagageType, setbagageType] = useState('box');
   //   const [departure, setdeparture] = useState('Dakar, Sénégal');
   const [destination, setdestination] = useState('Paris');
+  const [date, setdate] = useState(new Date());
 
   const Main = () => {
     return (
@@ -288,6 +319,10 @@ const SearchResults = ({navigation}) => {
           setsearching,
           setresults,
           setloading,
+          bagageType,
+          setbagageType,
+          date,
+          setdate,
         }}>
         {searching ? <SearchMenu /> : <Main />}
       </ResearchContext.Provider>

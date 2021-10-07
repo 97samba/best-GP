@@ -239,6 +239,7 @@ const Contacts = () => {
       <Input
         value={contacts.principal.userPhoneNumber}
         rounded={4}
+        keyboardType="numeric"
         variant="unstyled"
         bg="white"
         placeholder="Mon numéro"
@@ -281,7 +282,7 @@ const Contacts = () => {
               rounded={10}
               bg="white"
               alignItems="center">
-              <MaterialIcon name="person-outline" size={20} color="tomato" />
+              <MaterialIcon name="person-outline" size={20} color="gray" />
               <HStack ml={3} space={2} flex={1}>
                 <Text numberOfLines={1}>
                   {contact.userFirstName}, {contact.userLastName}

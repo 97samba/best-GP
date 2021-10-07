@@ -181,21 +181,25 @@ const ReservedView = ({navigation, route}) => {
                   <Heading size="sm" fontWeight="400" color="trueGray.500">
                     Type
                   </Heading>
-                  <Heading size="sm">Téléphone</Heading>
+                  <Heading size="sm" color="dark.200" fontWeight={600}>
+                    Téléphone
+                  </Heading>
                 </VStack>
                 <VStack space={1} flex={1}>
                   <Heading size="sm" fontWeight="400" color="trueGray.500">
                     Distribution
                   </Heading>
-                  <Heading size="sm">
+                  <Heading size="sm" color="dark.200" fontWeight={600}>
                     {moment(item.distributionDate.toDate()).format('ll')}
                   </Heading>
                 </VStack>
                 <VStack space={1} flex={1}>
                   <Heading size="sm" fontWeight="400" color="trueGray.500">
-                    Téléphone
+                    Contact GP
                   </Heading>
-                  <Heading size="sm">704562143</Heading>
+                  <Heading color="dark.200" fontWeight={600} size="sm">
+                    704562143
+                  </Heading>
                 </VStack>
               </HStack>
 
@@ -204,19 +208,25 @@ const ReservedView = ({navigation, route}) => {
                   <Heading size="sm" fontWeight="400" color="trueGray.500">
                     Receveur
                   </Heading>
-                  <Heading fontSize={14}>Samba Ndiaye</Heading>
+                  <Heading color="dark.200" fontWeight={600} size="sm">
+                    Samba Ndiaye
+                  </Heading>
                 </VStack>
                 <VStack space={1} flex={1}>
                   <Heading size="sm" fontWeight="400" color="trueGray.500">
-                    Distribution
+                    Poids
                   </Heading>
-                  <Heading size="sm">02/09/2021</Heading>
+                  <Heading size="sm" color="dark.200" fontWeight={600}>
+                    {informations.weight} kg
+                  </Heading>
                 </VStack>
                 <VStack space={1} flex={1}>
                   <Heading size="sm" fontWeight="400" color="trueGray.500">
                     Contact
                   </Heading>
-                  <Heading size="sm">774562345</Heading>
+                  <Heading color="dark.200" fontWeight={600} size="sm">
+                    774562345
+                  </Heading>
                 </VStack>
               </HStack>
               <Divider my={1} />
@@ -244,11 +254,26 @@ const ReservedView = ({navigation, route}) => {
                   endIcon={
                     <MaterialIcon name="photo-library" size={20} color="gray" />
                   }>
-                  Images de l'article
+                  Images
+                </Button>
+                {/* annulation */}
+                <Button
+                  bg="red.200"
+                  size="md"
+                  ml={2}
+                  _text={{color: 'gray.600', fontSize: 'sm'}}
+                  endIcon={
+                    <MaterialIcon name="close" size={20} color="tomato" />
+                  }>
+                  Annuler
                 </Button>
               </HStack>
               {informations.shipping ? (
-                <HStack alignItems="center" space={1}>
+                <HStack
+                  mt={4}
+                  alignItems="center"
+                  justifyContent="center"
+                  space={1}>
                   <Heading size="sm" style={{color: 'green'}} fontWeight="400">
                     Livraison gratuite
                   </Heading>

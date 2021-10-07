@@ -95,17 +95,31 @@ const Publish = () => {
   //tarifications
   const [pricePerKg, setpricePerKg] = useState('10');
   const [pricePerSuitcase, setpricePerSuitcase] = useState('200');
+  const [currency, setcurrency] = useState('€');
+
+  const [prices, setPrices] = useState({
+    pricePerKg: pricePerKg,
+    pricePerSuitcase: pricePerSuitcase,
+    others: [
+      {
+        price: '11',
+        icon: <MaterialIcon name="phone" size={20} color="gray" />,
+        type: 'electronic',
+      },
+    ],
+    currency: currency,
+  });
 
   const handleSave = () => {
     //verify vol
     const validation = ValidateFlight(departure, destination);
     console.log(`validation vol `, validation);
-    publishItem();
     //verify dates
     //verify valises
     //verify depot
     //verify contact
     //verify price
+    publishItem();
   };
 
   const publishItem = async () => {
@@ -115,6 +129,12 @@ const Publish = () => {
         lastName: userName,
         id: user.uid,
         phone: userPhoneNumber,
+      },
+      contacts: {
+        gp: {
+          ...contacts.principal,
+        },
+        others: contacts.others,
       },
       departure: departure,
       destination: destination,
@@ -127,10 +147,11 @@ const Publish = () => {
       pricePerKg: pricePerKg,
       pricePerSuitcase: pricePerSuitcase,
     };
-    await Firestore()
-      .collection('flights')
-      .add(item)
-      .then(() => console.log('done'));
+    console.log(`item`, item);
+    // await Firestore()
+    //   .collection('flights')
+    //   .add(item)
+    //   .then(() => console.log('done'));
   };
   useEffect(() => {
     console.log(`user`, user);
@@ -141,6 +162,8 @@ const Publish = () => {
       <ScrollView>
         <PublishContext.Provider
           value={{
+            prices,
+            setPrices,
             contacts,
             setcontacts,
             departure,
@@ -172,6 +195,8 @@ const Publish = () => {
             pricePerSuitcase,
             setpricePerSuitcase,
             handleSave,
+            currency,
+            setcurrency,
           }}>
           <Box flex={1} p={5} color="gray">
             <Vols />

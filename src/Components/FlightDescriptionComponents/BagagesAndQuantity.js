@@ -35,7 +35,7 @@ const BagagesAndQuantity = () => {
     },
     {
       value: 'paper',
-      label: 'Papier',
+      label: 'Documents',
       startIcon: <MaterialIcon name="mail" size={20} color="gray" />,
     },
     {
@@ -61,6 +61,7 @@ const BagagesAndQuantity = () => {
       startIcon: <IonIcon name="fast-food" size={20} color="gray" />,
     },
   ];
+
   const PhoneModels = [
     {
       brand: 'Apple',

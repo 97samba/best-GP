@@ -177,6 +177,8 @@ const NormalFlight = ({item, navigation}) => {
                 {item.departure[0]}
               </Avatar>
               <HStack space={1}>
+                {/* <Text fontSize="xs">{item.contacts.gp.firstName}</Text> */}
+
                 <Text fontSize="xs">{item.publisher.firstName}</Text>
                 <FontAwesome name="check-circle" size={14} color="gray" />
               </HStack>

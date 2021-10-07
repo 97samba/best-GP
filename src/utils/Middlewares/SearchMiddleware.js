@@ -2,23 +2,42 @@ import firestore from '@react-native-firebase/firestore';
 
 const applyPromocode = ({promoCode}) => {};
 
-const completSearch = async (departure, destination) => {
+const completSearch = async (departure, destination, date) => {
+  var dueDate = new Date('2021-03-01T23:59:59.000z');
+  // console.log(`date`, date);
+  // console.log(`date`, dueDate);
+
   const results = await firestore()
     .collection('flights')
     .where('departure', '==', departure)
     .where('destination', '==', destination)
+    // .orderBy('pricePerKg')
     .get()
     .then(query => {
+      if (date !== new Date()) {
+        var newState = query.docs;
+        newState = newState.sort((a, b) => a - b);
+        console.log('newState ', newState);
+        return newState;
+      }
       return query.docs;
     });
   return results;
 };
-const searchDepartureOrDestinationOnly = async (label, search) => {
+//la meme fonction fait la recherche pour les deux type de recherche, a
+const searchDepartureOrDestinationOnly = async (label, search, date) => {
   const results = await firestore()
     .collection('flights')
     .where(label, '==', search)
+    // .where('distributionDate', '>=', date)
     .get()
     .then(query => {
+      if (date !== new Date()) {
+        var newState = query.docs;
+        newState = newState.sort((a, b) => a - b);
+        console.log(newState);
+        return newState;
+      }
       return query.docs;
     });
   return results;
@@ -31,13 +50,13 @@ export const findResults = async (
   type,
   promoCode,
 ) => {
-  console.log(`departure`, departure);
-  console.log(`destination`, destination);
   if (departure == '' || destination == '') {
     if (departure) {
-      return searchDepartureOrDestinationOnly('departure', departure);
+      return searchDepartureOrDestinationOnly('departure', departure, date);
     }
-    return searchDepartureOrDestinationOnly('destination', destination);
+    console.log(`date`, date);
+    return searchDepartureOrDestinationOnly('destination', destination, date);
   }
-  return completSearch(departure, destination);
+
+  return completSearch(departure, destination, date);
 };

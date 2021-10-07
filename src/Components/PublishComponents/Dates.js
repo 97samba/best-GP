@@ -74,7 +74,8 @@ const Dates = () => {
       {showLastDepot && (
         <Center>
           <DateTimePicker
-            value={lastDepot}
+            value={new Date()}
+            testID="depotPicker"
             onChange={(e, date) =>
               HandleDateChanged(date, setLastDepot, lastDepot, setshowLastDepot)
             }
